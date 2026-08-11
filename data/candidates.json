@@ -1,0 +1,122 @@
+[
+  {
+    "candidate_id": "CAND_001",
+    "name": "Priya Nathan",
+    "job_id": "JOB_001",
+    "source_channel": "Referral",
+    "application_date": "2026-07-22",
+    "resume_text": "Senior Backend Engineer at Ferrovia Systems, Mar 2022 - Present (3.4 yrs). Led the migration of Ferrovia's monolithic order-processing service to a distributed, event-driven architecture (Kafka + Go), cutting P99 latency by 40% and enabling the team to ship independently for the first time. Managed a rotating on-call for the 4-person platform team and mentored two junior engineers through their first production incidents. Backend Engineer at Doric Software, Jun 2019 - Feb 2022 (2.7 yrs). Built and operated Python/Django services handling ~2M requests/day; introduced the company's first structured logging and alerting setup. B.S. Computer Science, Rutgers University, 2019."
+  },
+  {
+    "candidate_id": "CAND_002",
+    "name": "Marcus Wei",
+    "job_id": "JOB_001",
+    "source_channel": "QuickApply Staffing Agency",
+    "application_date": "2026-07-21",
+    "resume_text": "Senior Staff Engineer at Vantify Inc, Aug 2025 - Present. Sole owner of Vantify's entire distributed systems strategy, with 10+ years of deep Kubernetes expertise architecting planet-scale infrastructure serving hundreds of millions of users. Full-stack Developer at BrightPath LLC, Jan 2024 - Aug 2025. Built scalable microservices. Junior Developer Intern at Coastal Apps, Jun 2023 - Dec 2023. B.S. Computer Science, expected graduation 2024, State University."
+  },
+  {
+    "candidate_id": "CAND_003",
+    "name": "Helena Brookes",
+    "job_id": "JOB_001",
+    "source_channel": "LinkedIn",
+    "application_date": "2026-07-19",
+    "resume_text": "Software Engineer II atAllenport Retail, Jan 2021 - Present (4.6 yrs). Maintain and extend a monolithic Ruby on Rails e-commerce platform; own the checkout and payments module. Comfortable working independently but have not architected distributed systems from scratch - most infrastructure decisions are made by a separate platform team. Software Engineer at Bellcrest Media, Jul 2018 - Dec 2020 (2.4 yrs). General backend development in Ruby. B.A. Computer Science, Oberlin College, 2018."
+  },
+  {
+    "candidate_id": "CAND_004",
+    "name": "Jordan Ellis",
+    "job_id": "JOB_001",
+    "source_channel": "QuickApply Staffing Agency",
+    "application_date": "2026-07-21",
+    "resume_text": "Senior Backend Engineer, Jan 2022 - Jan 2024. Results-driven, highly motivated senior backend engineer with proven expertise in distributed systems, Python, Go, Kubernetes, AWS, GCP, microservices, leadership, and cross-functional collaboration. Backend Engineer, Jan 2020 - Jan 2022. Results-driven backend engineer with strong distributed systems, Python, Go, Kubernetes, AWS, GCP, and microservices background. Software Engineer, Jan 2018 - Jan 2020. Results-driven software engineer skilled in distributed systems, Python, Go, and cloud infrastructure. B.S. Computer Science, 2018."
+  },
+  {
+    "candidate_id": "CAND_005",
+    "name": "Aisha Bello",
+    "job_id": "JOB_001",
+    "source_channel": "Company Careers Page",
+    "application_date": "2026-07-23",
+    "resume_text": "Tech Lead at Solvent Data (acquired by Ridgeline Corp, role ended in restructuring), Sep 2024 - Jun 2026 (1.8 yrs). Led a 5-engineer team building Solvent's real-time analytics pipeline on distributed streaming infrastructure; when Ridgeline acquired the company, my team's product line was discontinued and the role was eliminated. Senior Engineer at Almora Tech, Feb 2023 - Aug 2024 (1.5 yrs) - left after the company's Series A funding fell through and the engineering org was cut by 60%. Backend Engineer at Ferro Labs, Jun 2021 - Jan 2023 (1.6 yrs). Promoted twice in under 2 years; led the on-call rotation and trained 3 new hires. B.S. Computer Science, Georgia Tech, 2021."
+  },
+  {
+    "candidate_id": "CAND_006",
+    "name": "Tom Halvorsen",
+    "job_id": "JOB_001",
+    "source_channel": "LinkedIn",
+    "application_date": "2026-07-18",
+    "resume_text": "Backend Engineer at Kestrel Financial, Aug 2018 - Present (7.9 yrs). Long-tenured member of the core banking-services team; have never formally managed people but am the go-to person new hires shadow during onboarding and have informally mentored 6 engineers over the years. Work primarily in Python on a well-established distributed transaction-processing system I did not originally architect but now maintain and extend. B.S. Information Systems, University of Minnesota, 2018."
+  },
+  {
+    "candidate_id": "CAND_007",
+    "name": "Daniel Cho",
+    "job_id": "JOB_001",
+    "source_channel": "LinkedIn",
+    "application_date": "2026-07-20",
+    "resume_text": "Senior Backend Engineer at Praxis Systems, Jun 2021 - Present (4.6 yrs). Architected Praxis's distributed order-matching engine handling 50K transactions/second; led a 3-person team through a full rewrite from PHP to Go. Full-Time MBA Candidate, Wharton School of Business, Aug 2021 - May 2023. Software Engineer at Northgate Solutions, 2019 - 2021. B.S. Computer Science, 2019."
+  },
+  {
+    "candidate_id": "CAND_008",
+    "name": "Renata Silva",
+    "job_id": "JOB_001",
+    "source_channel": "Referral",
+    "application_date": "2026-07-24",
+    "resume_text": "Senior Backend Engineer at Loom & Ledger, Mar 2023 - Present (2.8 yrs). Switched into software engineering in 2020 after 6 years as a structural engineer; completed an intensive backend-focused bootcamp and have spent the last 5.7 years building distributed inventory and logistics systems in Go and Python, including leading the design of a warehouse-routing service now used by 40+ client sites. Backend Engineer at Fennwick Logistics, Jan 2020 - Feb 2023 (3.1 yrs). B.S. Civil Engineering, Purdue University, 2013; Backend Engineering Certificate, Fullstack Academy, 2019."
+  },
+  {
+    "candidate_id": "CAND_009",
+    "name": "Owen Fitzgerald",
+    "job_id": "JOB_001",
+    "source_channel": "LinkedIn",
+    "application_date": "2026-07-17",
+    "resume_text": "Backend Engineer at Corvus Health, Feb 2020 - Present (5.9 yrs). Solid individual contributor building HIPAA-compliant Python services; have contributed to distributed systems designed by senior architects but have not personally led an architecture decision or a team, formal or informal - I execute well-scoped tickets and have a strong reliability track record. B.S. Computer Science, Purdue University, 2019."
+  },
+  {
+    "candidate_id": "CAND_010",
+    "name": "Victor Adeyemi",
+    "job_id": "JOB_001",
+    "source_channel": "QuickApply Staffing Agency",
+    "application_date": "2026-07-22",
+    "resume_text": "Principal Architect at Northstar Global, Jan 2023 - Present. 12 years leading enterprise-scale distributed systems architecture for Fortune 500 clients across finance, healthcare, and retail. Senior Consultant at Meridian Partners, 2021 - 2023. B.S. Computer Science, Cal Poly, graduated 2020."
+  },
+  {
+    "candidate_id": "CAND_011",
+    "name": "Grace Lindqvist",
+    "job_id": "JOB_001",
+    "source_channel": "Company Careers Page",
+    "application_date": "2026-07-25",
+    "resume_text": "Currently between roles - laid off from Bastion Cloud in April 2026 as part of a company-wide 18% reduction in force; role and entire platform team were eliminated. Senior Backend Engineer at Bastion Cloud, May 2022 - Apr 2026 (3.9 yrs). Led the design and rollout of Bastion's multi-region distributed caching layer, reducing read latency by 55% across 3 regions; directly managed 2 engineers for the final year. Backend Engineer at Hollowell Systems, Jul 2019 - Apr 2022 (2.8 yrs). B.S. Computer Science, University of Washington, 2019."
+  },
+  {
+    "candidate_id": "CAND_012",
+    "name": "Samir Kapoor",
+    "job_id": "JOB_001",
+    "source_channel": "QuickApply Staffing Agency",
+    "application_date": "2026-07-21",
+    "resume_text": "Backend Engineer, various contract roles via staffing placements, 2022 - Present. Have worked short-term contracts (3-9 months each) at four different companies building REST APIs in Python. Comfortable with Django and Flask. Limited exposure to distributed systems design; most contracts involved feature work on existing services rather than architecture. A.S. Computer Science, community college, 2021."
+  },
+  {
+    "candidate_id": "CAND_013",
+    "name": "Ethan Marlow",
+    "job_id": "JOB_001",
+    "source_channel": "QuickApply Staffing Agency",
+    "application_date": "2026-07-21",
+    "resume_text": "Senior Backend Engineer, Jan 2022 - Jan 2024. Results-driven, highly motivated senior backend engineer with proven expertise in distributed systems, Python, Go, Kubernetes, AWS, GCP, microservices, leadership, and cross-functional collaboration. Backend Engineer, Jan 2020 - Jan 2022. Results-driven backend engineer with strong distributed systems, Python, Go, Kubernetes, AWS, GCP, and microservices background. Software Engineer, Jan 2018 - Jan 2020. Results-driven software engineer skilled in distributed systems, Python, Go, and cloud infrastructure. B.S. Computer Science, 2018."
+  },
+  {
+    "candidate_id": "CAND_014",
+    "name": "Naomi Turner",
+    "job_id": "JOB_001",
+    "source_channel": "Referral",
+    "application_date": "2026-07-23",
+    "resume_text": "Senior Backend Engineer at Halberd Analytics, Apr 2021 - Present (5.3 yrs). Designed and led the build-out of Halberd's distributed event-processing platform (Go, Kafka, Kubernetes) from a single-node prototype to a system handling 200M events/day; currently the technical lead for a 4-person team and run the team's architecture review process. Backend Engineer at Woodmere Tech, Jun 2018 - Mar 2021 (2.8 yrs). B.S. Computer Science, University of Michigan, 2018."
+  },
+  {
+    "candidate_id": "CAND_015",
+    "name": "Chris Palladino",
+    "job_id": "JOB_001",
+    "source_channel": "LinkedIn",
+    "application_date": "2026-07-18",
+    "resume_text": "QA Automation Engineer at Delft Software, Feb 2019 - Present (6.5 yrs). Built and maintain the company's end-to-end test automation suite in Python (Selenium, pytest); some exposure to backend services through test infrastructure work but no professional experience designing or building production backend systems. B.S. Computer Science, Iowa State University, 2018."
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "job_id": "JOB_001",
+  "title": "Senior Backend Engineer",
+  "company": "Meridian Consulting Group",
+  "department": "Engineering",
+  "location": "Remote (US)",
+  "posted_date": "2026-07-20",
+  "must_haves": [
+    "5+ years professional backend engineering experience",
+    "Hands-on distributed systems experience (not just theoretical)",
+    "Strong Python or Go",
+    "Has led at least one significant technical initiative or a team, formally or informally"
+  ],
+  "nice_to_haves": [
+    "Kubernetes / container orchestration",
+    "Cloud infrastructure (AWS or GCP)",
+    "Mentoring or onboarding experience"
+  ],
+  "description": "Meridian Consulting Group is hiring a Senior Backend Engineer to join a client-facing engineering pod. You'll design and operate distributed backend systems, work directly with client engineering teams, and be expected to lead technical decisions on your projects with minimal oversight."
+}
