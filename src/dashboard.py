@@ -43,12 +43,14 @@ ROUNDS = ["AI Screening", "Technical Screening"]
 
 CATEGORIES = {
     "shortlisted": {"label": "Shortlisted", "color": "#3987e5"},
-    # Both negative categories default to red - a candidate that isn't actively
-    # progressing should read as "stop" at a glance, not blend into neutral gray.
+    # All three non-shortlisted categories default to red - a candidate that
+    # isn't actively progressing should read as "stop" at a glance, not blend
+    # into neutral gray.
     "flagged_for_risk": {"label": "Flagged for Risk", "color": "#d03b3b"},
+    "not_suitable": {"label": "Not Suitable", "color": "#d03b3b"},
     "not_moving_forward": {"label": "Not Moving Forward", "color": "#d03b3b"},
 }
-CATEGORY_ORDER = ["shortlisted", "flagged_for_risk", "not_moving_forward"]
+CATEGORY_ORDER = ["shortlisted", "flagged_for_risk", "not_suitable", "not_moving_forward"]
 
 ACCENT = "#3987e5"       # sequential blue - fit score
 ACCENT_TRACK = "#1c3a5e"  # darker step of the same ramp, recedes on dark surface
@@ -144,20 +146,41 @@ def save_pipeline_state(state: dict):
     PIPELINE_STATE_PATH.write_text(json.dumps(state, indent=2))
 
 
-def default_category(fraud_risk: str) -> str:
-    return "flagged_for_risk" if fraud_risk == "high" else "shortlisted"
+def missing_must_haves(r: dict, jd: dict) -> list[str]:
+    """Cross-references the JD-fit agent's requirements_missing (which mixes
+    must-haves and nice-to-haves despite its prompt) against the JD's actual
+    must_haves list, so a missing nice-to-have never gets treated as a
+    disqualifier. The agent reliably restates a must-have's exact text inside
+    the missing-item string (sometimes with an appended clause), so substring
+    containment is enough - no second LLM call needed."""
+    musts = jd.get("must_haves", [])
+    hits = []
+    for item in r.get("requirements_missing", []):
+        for mh in musts:
+            if mh.strip().lower() in item.strip().lower():
+                hits.append(mh)
+                break
+    return hits
 
 
-def get_candidate_state(state: dict, candidate_id: str, fraud_risk: str) -> dict:
+def default_category(fraud_risk: str, not_suitable: bool = False) -> str:
+    if fraud_risk == "high":
+        return "flagged_for_risk"
+    if not_suitable:
+        return "not_suitable"
+    return "shortlisted"
+
+
+def get_candidate_state(state: dict, candidate_id: str, fraud_risk: str, not_suitable: bool = False) -> dict:
     entry = state.get(candidate_id)
     if entry:
         return entry
-    return {"category": default_category(fraud_risk), "round_index": 0, "history": []}
+    return {"category": default_category(fraud_risk, not_suitable), "round_index": 0, "history": []}
 
 
-def record_action(state: dict, candidate_id: str, fraud_risk: str, *,
+def record_action(state: dict, candidate_id: str, fraud_risk: str, not_suitable: bool = False, *,
                    category: str | None = None, advance: bool = False, comment: str = ""):
-    cur = get_candidate_state(state, candidate_id, fraud_risk)
+    cur = get_candidate_state(state, candidate_id, fraud_risk, not_suitable)
     round_index = cur["round_index"]
     new_category = category if category is not None else cur["category"]
 
@@ -188,6 +211,8 @@ def requires_comment(r: dict, new_category: str) -> bool:
     own finding, so making a human retype it would be pure friction."""
     if new_category == "flagged_for_risk":
         return r["fraud_risk"] == "low"
+    if new_category == "not_suitable":
+        return not r.get("not_suitable", False)
     if new_category == "not_moving_forward":
         has_system_reason = r["fraud_risk"] == "high" or bool(r["requirements_missing"])
         return not has_system_reason
@@ -282,7 +307,8 @@ def move_control(state: dict, r: dict, key_prefix: str):
         with c1:
             if st.button("Confirm", key=f"{pending_key}_confirm"):
                 if reason.strip():
-                    record_action(state, candidate_id, r["fraud_risk"], category=pending, comment=reason)
+                    record_action(state, candidate_id, r["fraud_risk"], r["not_suitable"],
+                                  category=pending, comment=reason)
                     del st.session_state[pending_key]
                     st.rerun()
                 else:
@@ -304,7 +330,7 @@ def move_control(state: dict, r: dict, key_prefix: str):
             st.session_state[pending_key] = new_cat
             st.rerun()
         else:
-            record_action(state, candidate_id, r["fraud_risk"], category=new_cat)
+            record_action(state, candidate_id, r["fraud_risk"], r["not_suitable"], category=new_cat)
             st.rerun()
 
 
@@ -327,6 +353,10 @@ def go(view: str, **kwargs):
 
 jds, candidates, results = load_data()
 jds_by_id = {j["job_id"]: j for j in jds}
+for _r in results:
+    _hits = missing_must_haves(_r, jds_by_id[_r["job_id"]])
+    _r["missing_must_haves"] = _hits
+    _r["not_suitable"] = bool(_hits)
 
 
 # ---------------------------------------------------------------------------
@@ -349,7 +379,8 @@ def view_requirements():
 
     for jd in jds:
         job_results = [r for r in results if r["job_id"] == jd["job_id"]]
-        cats = [get_candidate_state(state, r["candidate_id"], r["fraud_risk"])["category"] for r in job_results]
+        cats = [get_candidate_state(state, r["candidate_id"], r["fraud_risk"], r["not_suitable"])["category"]
+                for r in job_results]
         shortlisted_n = cats.count("shortlisted")
         flagged_n = cats.count("flagged_for_risk")
         shortlisted_scores = [r["fit_score"] for r, c in zip(job_results, cats) if c == "shortlisted"]
@@ -410,7 +441,7 @@ def candidate_row(r: dict, state: dict, key_prefix: str, rank: int | None = None
             if cat_state["category"] == "shortlisted" and cat_state["round_index"] < len(ROUNDS) - 1:
                 next_round = ROUNDS[cat_state["round_index"] + 1]
                 if st.button(f"Advance to {next_round} →", key=f"{key_prefix}_adv_{r['candidate_id']}"):
-                    record_action(state, r["candidate_id"], r["fraud_risk"], advance=True)
+                    record_action(state, r["candidate_id"], r["fraud_risk"], r["not_suitable"], advance=True)
                     st.rerun()
         with cols2[2]:
             if st.button("View Profile →", key=f"{key_prefix}_prof_{r['candidate_id']}"):
@@ -424,12 +455,14 @@ def view_candidates():
 
     state = load_pipeline_state()
     for r in job_results:
-        r["_cat_state"] = get_candidate_state(state, r["candidate_id"], r["fraud_risk"])
+        r["_cat_state"] = get_candidate_state(state, r["candidate_id"], r["fraud_risk"], r["not_suitable"])
 
     shortlisted = sorted([r for r in job_results if r["_cat_state"]["category"] == "shortlisted"],
                           key=lambda r: r["fit_score"], reverse=True)
     flagged = sorted([r for r in job_results if r["_cat_state"]["category"] == "flagged_for_risk"],
                       key=lambda r: r["fit_score"], reverse=True)
+    not_suitable = sorted([r for r in job_results if r["_cat_state"]["category"] == "not_suitable"],
+                           key=lambda r: r["fit_score"], reverse=True)
     not_moving = sorted([r for r in job_results if r["_cat_state"]["category"] == "not_moving_forward"],
                          key=lambda r: r["fit_score"], reverse=True)
 
@@ -445,9 +478,10 @@ def view_candidates():
         avg_cost = (total_cost / len(job_results)) if job_results else 0
         st.markdown(cost_strip(total_cost, avg_cost), unsafe_allow_html=True)
 
-    c1, c2 = st.columns(2)
+    c1, c2, c3 = st.columns(3)
     c1.markdown(stat_tile("Ranked shortlist", str(len(shortlisted))), unsafe_allow_html=True)
     c2.markdown(stat_tile("Flagged for review", str(len(flagged))), unsafe_allow_html=True)
+    c3.markdown(stat_tile("Not suitable", str(len(not_suitable))), unsafe_allow_html=True)
     st.write("")
 
     st.markdown('<div class="section-label">Ranked shortlist &mdash; by fit score</div>', unsafe_allow_html=True)
@@ -465,6 +499,24 @@ def view_candidates():
             candidate_row(r, state, "fl")
     else:
         st.caption("No candidates currently flagged.")
+
+    if not_suitable:
+        st.write("")
+        with st.expander(f"🚫 Not Suitable Profiles ({len(not_suitable)}) — auto-filtered for missing a "
+                          f"must-have requirement", expanded=True):
+            for r in not_suitable:
+                cat_state = r["_cat_state"]
+                cols = st.columns([2.3, 3.2, 1.8, 1.3])
+                with cols[0]:
+                    st.markdown(f"**{r['name']}**")
+                    st.caption(f'{r["source_channel"]} · fit {r["fit_score"]}')
+                with cols[1]:
+                    st.caption("Missing: " + "; ".join(r["missing_must_haves"]))
+                with cols[2]:
+                    move_control(state, r, "ns")
+                with cols[3]:
+                    if st.button("View Profile →", key=f"ns_prof_{r['candidate_id']}"):
+                        go("profile", candidate_id=r["candidate_id"])
 
     if not_moving:
         st.write("")
@@ -494,7 +546,7 @@ def view_profile():
     r = next(x for x in results if x["candidate_id"] == st.session_state.candidate_id)
     jd = jds_by_id[r["job_id"]]
     state = load_pipeline_state()
-    cat_state = get_candidate_state(state, r["candidate_id"], r["fraud_risk"])
+    cat_state = get_candidate_state(state, r["candidate_id"], r["fraud_risk"], r["not_suitable"])
 
     if st.button("← Back to Candidates"):
         go("candidates", job_id=r["job_id"])
@@ -576,7 +628,8 @@ def view_profile():
                          f"{CATEGORIES[target_category]['label']} — the system hasn't already "
                          f"flagged a reason for this move.")
             else:
-                record_action(state, r["candidate_id"], r["fraud_risk"], comment=comment, **kwargs)
+                record_action(state, r["candidate_id"], r["fraud_risk"], r["not_suitable"],
+                              comment=comment, **kwargs)
                 st.rerun()
 
     st.write("")
