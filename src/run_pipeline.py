@@ -30,6 +30,7 @@ def run_all_agents(candidate: dict, jd: dict) -> dict:
     return {
         "candidate_id": candidate["candidate_id"],
         "name": candidate["name"],
+        "job_id": jd["job_id"],
         "source_channel": candidate.get("source_channel", "unknown"),
         "fraud_risk": fraud.fraud_risk,
         "fraud_flags": fraud.fraud_flags,
@@ -50,22 +51,26 @@ def run_all_agents(candidate: dict, jd: dict) -> dict:
 
 
 def main():
-    jd = json.loads((DATA_DIR / "jd.json").read_text())
+    jds = json.loads((DATA_DIR / "jd.json").read_text())
     candidates = json.loads((DATA_DIR / "candidates.json").read_text())
-    print(f"Role: {jd['title']} @ {jd['company']}")
-    print(f"Scoring {len(candidates)} candidates against it...\n")
 
     results = []
     failures = []
     start = time.time()
 
-    for c in candidates:
-        print(f"{c['candidate_id']} ({c['name']})...")
-        try:
-            results.append(run_all_agents(c, jd))
-        except AgentCallFailed as e:
-            print(f"  ⚠️  ESCALATED TO HUMAN REVIEW: {e}")
-            failures.append({"candidate_id": c["candidate_id"], "error": str(e)})
+    for jd in jds:
+        job_candidates = [c for c in candidates if c.get("job_id") == jd["job_id"]]
+        print(f"Role: {jd['title']} @ {jd['company']} ({jd['job_id']})")
+        print(f"Scoring {len(job_candidates)} candidates against it...\n")
+
+        for c in job_candidates:
+            print(f"{c['candidate_id']} ({c['name']})...")
+            try:
+                results.append(run_all_agents(c, jd))
+            except AgentCallFailed as e:
+                print(f"  ⚠️  ESCALATED TO HUMAN REVIEW: {e}")
+                failures.append({"candidate_id": c["candidate_id"], "job_id": jd["job_id"], "error": str(e)})
+        print()
 
     elapsed = time.time() - start
     total_cost = sum(r["total_cost_usd"] for r in results)
@@ -73,31 +78,34 @@ def main():
     out_path = OUTPUT_DIR / "pipeline_results.json"
     out_path.write_text(json.dumps(results, indent=2))
 
-    flagged_review = [r for r in results if r["fraud_risk"] == "high"]
-    rankable = [r for r in results if r["fraud_risk"] != "high"]
-    rankable.sort(key=lambda r: r["fit_score"], reverse=True)
-
-    print(f"\n{'=' * 70}")
+    print(f"{'=' * 70}")
     print(f"Done in {elapsed:.1f}s  |  Total cost: ${total_cost:.4f}  |  "
-          f"Escalated: {len(failures)}  |  Flagged for review: {len(flagged_review)}")
+          f"Escalated: {len(failures)}  |  Roles scored: {len(jds)}")
     print(f"{'=' * 70}\n")
 
-    print("RANKED SHORTLIST")
-    print("-" * 70)
-    for i, r in enumerate(rankable, 1):
-        flag = " [MEDIUM FRAUD RISK - reviewed but flagged]" if r["fraud_risk"] == "medium" else ""
-        print(f"{i:2}. {r['name']:<22} fit={r['fit_score']:3}  "
-              f"leadership={r['leadership_score']:.2f}  loyalty={r['loyalty_score']:.2f}{flag}")
-        if r["requirements_missing"]:
-            print(f"     missing: {r['requirements_missing']}")
+    for jd in jds:
+        job_results = [r for r in results if r["job_id"] == jd["job_id"]]
+        flagged_review = [r for r in job_results if r["fraud_risk"] == "high"]
+        rankable = [r for r in job_results if r["fraud_risk"] != "high"]
+        rankable.sort(key=lambda r: r["fit_score"], reverse=True)
 
-    if flagged_review:
-        print("\nFLAGGED FOR MANUAL REVIEW (high fraud risk - excluded from ranking)")
+        print(f"RANKED SHORTLIST — {jd['title']} ({jd['job_id']})")
         print("-" * 70)
-        for r in flagged_review:
-            print(f"  - {r['name']} ({r['candidate_id']}): {r['fraud_flags']}")
+        for i, r in enumerate(rankable, 1):
+            flag = " [MEDIUM FRAUD RISK - reviewed but flagged]" if r["fraud_risk"] == "medium" else ""
+            print(f"{i:2}. {r['name']:<22} fit={r['fit_score']:3}  "
+                  f"leadership={r['leadership_score']:.2f}  loyalty={r['loyalty_score']:.2f}{flag}")
+            if r["requirements_missing"]:
+                print(f"     missing: {r['requirements_missing']}")
 
-    print(f"\nSaved: {out_path}")
+        if flagged_review:
+            print(f"\nFLAGGED FOR MANUAL REVIEW — {jd['title']} (high fraud risk, excluded from ranking)")
+            print("-" * 70)
+            for r in flagged_review:
+                print(f"  - {r['name']} ({r['candidate_id']}): {r['fraud_flags']}")
+        print()
+
+    print(f"Saved: {out_path}")
 
 
 if __name__ == "__main__":

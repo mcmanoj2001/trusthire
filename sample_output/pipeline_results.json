@@ -95,7 +95,8 @@
           "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
         ]
       }
-    }
+    },
+    "job_id": "JOB_001"
   },
   {
     "candidate_id": "CAND_002",
@@ -196,7 +197,8 @@
           "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
         ]
       }
-    }
+    },
+    "job_id": "JOB_001"
   },
   {
     "candidate_id": "CAND_003",
@@ -294,7 +296,8 @@
           "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
         ]
       }
-    }
+    },
+    "job_id": "JOB_001"
   },
   {
     "candidate_id": "CAND_004",
@@ -398,7 +401,8 @@
           "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
         ]
       }
-    }
+    },
+    "job_id": "JOB_001"
   },
   {
     "candidate_id": "CAND_005",
@@ -495,7 +499,8 @@
           "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
         ]
       }
-    }
+    },
+    "job_id": "JOB_001"
   },
   {
     "candidate_id": "CAND_006",
@@ -587,7 +592,8 @@
           "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
         ]
       }
-    }
+    },
+    "job_id": "JOB_001"
   },
   {
     "candidate_id": "CAND_007",
@@ -681,7 +687,8 @@
           "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
         ]
       }
-    }
+    },
+    "job_id": "JOB_001"
   },
   {
     "candidate_id": "CAND_008",
@@ -772,7 +779,8 @@
           "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
         ]
       }
-    }
+    },
+    "job_id": "JOB_001"
   },
   {
     "candidate_id": "CAND_009",
@@ -862,7 +870,8 @@
           "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
         ]
       }
-    }
+    },
+    "job_id": "JOB_001"
   },
   {
     "candidate_id": "CAND_010",
@@ -967,7 +976,8 @@
           "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
         ]
       }
-    }
+    },
+    "job_id": "JOB_001"
   },
   {
     "candidate_id": "CAND_011",
@@ -1062,7 +1072,8 @@
           "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
         ]
       }
-    }
+    },
+    "job_id": "JOB_001"
   },
   {
     "candidate_id": "CAND_012",
@@ -1153,7 +1164,8 @@
           "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
         ]
       }
-    }
+    },
+    "job_id": "JOB_001"
   },
   {
     "candidate_id": "CAND_013",
@@ -1253,7 +1265,8 @@
           "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
         ]
       }
-    }
+    },
+    "job_id": "JOB_001"
   },
   {
     "candidate_id": "CAND_014",
@@ -1355,7 +1368,8 @@
           "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
         ]
       }
-    }
+    },
+    "job_id": "JOB_001"
   },
   {
     "candidate_id": "CAND_015",
@@ -1446,6 +1460,7 @@
           "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for staying."
         ]
       }
-    }
+    },
+    "job_id": "JOB_001"
   }
 ]
