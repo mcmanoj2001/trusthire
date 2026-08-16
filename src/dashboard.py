@@ -58,6 +58,7 @@ INK_SECONDARY = "#c3c2b7"
 INK_MUTED = "#898781"
 SURFACE_2 = "#242422"
 BORDER = "rgba(255,255,255,0.10)"
+HEADING_GRADIENT = "linear-gradient(90deg, #3987e5 0%, #7c5cff 55%, #d946ef 100%)"  # blue -> violet -> magenta
 
 st.set_page_config(page_title="TrustHire Intelligence", layout="wide", initial_sidebar_state="collapsed")
 
@@ -98,6 +99,11 @@ footer {{visibility: hidden;}}
 div[data-testid="stVerticalBlockBorderWrapper"] {{
     border-color: {BORDER} !important;
     border-radius: 12px !important;
+}}
+.gradient-heading {{
+    background: {HEADING_GRADIENT};
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    display: inline-block; line-height: 1.2; margin: 0;
 }}
 </style>
 """, unsafe_allow_html=True)
@@ -212,6 +218,10 @@ def rag_color(value: float, scale_max: float = 1.0) -> str:
     if pct <= 0.5:
         return _lerp_hex(STATUS["high"]["color"], STATUS["medium"]["color"], pct / 0.5)
     return _lerp_hex(STATUS["medium"]["color"], STATUS["low"]["color"], (pct - 0.5) / 0.5)
+
+
+def gradient_heading(text: str, size: str = "2.25rem", weight: int = 800) -> str:
+    return f'<div class="gradient-heading" style="font-size:{size};font-weight:{weight};">{text}</div>'
 
 
 def status_badge(risk: str) -> str:
@@ -345,7 +355,7 @@ jds_by_id = {j["job_id"]: j for j in jds}
 # ---------------------------------------------------------------------------
 
 def view_requirements():
-    st.title("TrustHire Intelligence")
+    st.markdown(gradient_heading("TrustHire Intelligence"), unsafe_allow_html=True)
     st.caption("Open requirements — select one to see its ranked candidates")
     st.write("")
 
@@ -362,7 +372,7 @@ def view_requirements():
         with st.container(border=True):
             cols = st.columns([3, 1, 1, 1, 1.2])
             with cols[0]:
-                st.markdown(f"### {jd['title']}")
+                st.markdown(gradient_heading(jd["title"], size="1.5rem", weight=700), unsafe_allow_html=True)
                 st.markdown(f'<div class="meta-line">{jd["company"]} &middot; {jd["location"]} '
                             f'&middot; posted {jd["posted_date"]}</div>', unsafe_allow_html=True)
             with cols[1]:
@@ -443,7 +453,7 @@ def view_candidates():
 
     title_col, cost_col = st.columns([3, 1])
     with title_col:
-        st.title(jd["title"])
+        st.markdown(gradient_heading(jd["title"]), unsafe_allow_html=True)
         st.caption(f'{jd["company"]} &middot; {len(job_results)} candidates scored')
     with cost_col:
         st.write("")
