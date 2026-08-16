@@ -124,6 +124,15 @@ def load_data():
     return jds, candidates, results
 
 
+def save_jds(jds: list):
+    (DATA_DIR / "jd.json").write_text(json.dumps(jds, indent=2))
+
+
+def next_job_id(jds: list) -> str:
+    nums = [int(j["job_id"].split("_")[1]) for j in jds if j["job_id"].startswith("JOB_")]
+    return f"JOB_{(max(nums) + 1) if nums else 1:03d}"
+
+
 def load_pipeline_state() -> dict:
     """Not cached - must reflect writes from this same session immediately."""
     if not PIPELINE_STATE_PATH.exists():
@@ -325,8 +334,15 @@ jds_by_id = {j["job_id"]: j for j in jds}
 # ---------------------------------------------------------------------------
 
 def view_requirements():
-    st.markdown(gradient_heading("TrustHire Intelligence"), unsafe_allow_html=True)
-    st.caption("Open requirements — select one to see its ranked candidates")
+    title_col, add_col = st.columns([4, 1.3])
+    with title_col:
+        st.markdown(gradient_heading("TrustHire Intelligence"), unsafe_allow_html=True)
+        st.caption("Open requirements — select one to see its ranked candidates")
+    with add_col:
+        st.write("")
+        st.write("")
+        if st.button("+ Add Requirement", key="add_requirement_btn"):
+            go("new_requirement")
     st.write("")
 
     state = load_pipeline_state()
@@ -577,6 +593,78 @@ def view_profile():
 
 
 # ---------------------------------------------------------------------------
+# View 4 - New requirement intake
+# ---------------------------------------------------------------------------
+
+def view_new_requirement():
+    if st.button("← All Requirements"):
+        go("requirements")
+
+    st.markdown(gradient_heading("New Requirement", size="2rem", weight=800), unsafe_allow_html=True)
+    st.caption("Define a role to start scoring candidates against it.")
+    st.write("")
+
+    text_tab, voice_tab = st.tabs(["📝 Text & attachment", "🎙️ Voice intake"])
+
+    with text_tab:
+        uploaded = st.file_uploader(
+            "Attach a JD file (.txt or .md) — optional, pre-fills the description below",
+            type=["txt", "md"], key="jd_attachment",
+        )
+        prefill_description = ""
+        if uploaded is not None:
+            prefill_description = uploaded.read().decode("utf-8", errors="ignore")
+
+        with st.form("new_requirement_form"):
+            title = st.text_input("Job title*", placeholder="e.g. Data Platform Engineer")
+            col1, col2 = st.columns(2)
+            with col1:
+                company = st.text_input("Company", value="Meridian Consulting Group")
+            with col2:
+                location = st.text_input("Location", value="Remote (US)")
+            description = st.text_area("Description", value=prefill_description, height=100,
+                                        placeholder="A short summary of the role.")
+            must_haves_raw = st.text_area(
+                "Must-haves* (one per line)", height=110,
+                placeholder="5+ years of experience\nStrong SQL\nHands-on pipeline ownership",
+            )
+            nice_to_haves_raw = st.text_area(
+                "Nice-to-haves (one per line)", height=90,
+                placeholder="Cloud data warehouse experience\nMentoring experience",
+            )
+            submitted = st.form_submit_button("Create Requirement", type="primary")
+
+        if submitted:
+            must_haves = [line.strip() for line in must_haves_raw.splitlines() if line.strip()]
+            if not title.strip() or not must_haves:
+                st.error("A job title and at least one must-have requirement are required.")
+            else:
+                jds_current = json.loads((DATA_DIR / "jd.json").read_text())
+                new_jd = {
+                    "job_id": next_job_id(jds_current),
+                    "title": title.strip(),
+                    "company": company.strip() or "Meridian Consulting Group",
+                    "department": "",
+                    "location": location.strip() or "Remote (US)",
+                    "posted_date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+                    "must_haves": must_haves,
+                    "nice_to_haves": [line.strip() for line in nice_to_haves_raw.splitlines() if line.strip()],
+                    "description": description.strip(),
+                }
+                jds_current.append(new_jd)
+                save_jds(jds_current)
+                load_data.clear()
+                st.success(f'Created "{new_jd["title"]}" — add candidates and run the pipeline to start scoring it.')
+                go("requirements")
+
+    with voice_tab:
+        st.caption("Speak the role's requirements instead of typing them out.")
+        st.button("🎙️ Start voice intake", disabled=True, key="voice_intake_disabled")
+        st.caption("Coming soon — a recruiter will be able to describe a role out loud and have it "
+                   "transcribed and structured into requirements automatically.")
+
+
+# ---------------------------------------------------------------------------
 # Router
 # ---------------------------------------------------------------------------
 
@@ -586,3 +674,5 @@ elif st.session_state.view == "candidates":
     view_candidates()
 elif st.session_state.view == "profile":
     view_profile()
+elif st.session_state.view == "new_requirement":
+    view_new_requirement()

@@ -6,7 +6,7 @@ This is the working MVP for a larger designed system (full architecture, diagram
 
 ## What it does
 
-Given `data/jd.json` (one job description) and `data/candidates.json` (a batch of resumes):
+Given `data/jd.json` (open job descriptions — new ones can also be added from the dashboard, see below) and `data/candidates.json` (a batch of resumes):
 
 1. **Resume Authenticity & Fraud Detection** — flags timeline inconsistencies, tenure/skill implausibility, title inflation, and keyword-stuffed/templated resumes. Explicitly instructed *not* to penalize legitimate, stated reasons for job changes or gaps (layoffs, restructuring, acquisitions).
 2. **JD-Fit & Suitability Scoring** — scores each candidate against the specific job's must-haves and nice-to-haves, citing which requirements are met/missing and why.
@@ -14,7 +14,9 @@ Given `data/jd.json` (one job description) and `data/candidates.json` (a batch o
 
 An orchestrator runs all three per candidate, and a Streamlit dashboard surfaces the results with full evidence across three drill-down views: open requirements → ranked candidates → candidate profile.
 
-The dashboard also tracks a lightweight hiring pipeline per candidate — a category (Shortlisted / Flagged for Risk / Not Moving Forward, defaulting from the fraud-detection agent's risk rating but movable by a human from any list view or the profile page) and a round (AI Screening → Technical Screening, extensible). Every move or advance is timestamped, comment-able, and kept as history — this is also the raw input for a confidence-calibration feedback loop (see architecture doc, Section 4.16): comparing what a human actually decided against the agent's stated confidence, over time. Rejected candidates move to a collapsed "Not Moving Forward" list so the active view stays short.
+The dashboard also tracks a lightweight hiring pipeline per candidate — a category (Shortlisted / Flagged for Risk / Not Moving Forward, defaulting from the fraud-detection agent's risk rating but movable by a human from any list view or the profile page) and a round (AI Screening → Technical Screening, extensible). Every move or advance is timestamped, and a comment is required unless the system already supplied its own reason for that move (e.g. moving a high-fraud-risk candidate to Flagged for Risk just confirms the agent's own finding). History is kept per candidate — this is also the raw input for a confidence-calibration feedback loop (see architecture doc, Section 4.16): comparing what a human actually decided against the agent's stated confidence, over time. Rejected candidates move to a collapsed "Not Moving Forward" list so the active view stays short.
+
+A "+ Add Requirement" button on the landing page opens a form to define a new role by typing its title, must-haves, and nice-to-haves directly, or by attaching a `.txt`/`.md` JD file to pre-fill the description. A grayed-out "Voice intake" tab shows where speech-to-structured-requirements fits in — not built yet, but deliberately visible as a next step rather than silently absent.
 
 ## Setup
 
@@ -47,8 +49,8 @@ No API key handy? `sample_output/pipeline_results.json` is a real, checked-in ru
 ```
 hiring-intelligence/
 ├── data/
-│   ├── jd.json              # the role being hired for
-│   └── candidates.json      # 15 sample resumes (5 deliberately fraudulent)
+│   ├── jd.json              # open roles being hired for (2) — more can be added from the dashboard
+│   └── candidates.json      # 23 sample resumes across both roles (7 deliberately fraudulent)
 ├── src/
 │   ├── contract.py          # shared 5-field output schema every agent returns
 │   ├── config.py            # model tiering, pricing, reference date
@@ -88,18 +90,20 @@ A related arithmetic gap also showed up in JD-fit scoring — "N+ years experien
 
 ## Sample data
 
-`data/candidates.json` has 15 candidates, deliberately mixed:
-- **5 fraudulent**, covering distinct fraud patterns: title inflation, overlapping employment, keyword-stuffed templates (two candidates share near-identical text, submitted via the same staffing agency), and tenure/skill implausibility.
-- **10 genuine**, including two built specifically to test the bias-awareness guardrail: one candidate who changed jobs three times in four years for stated legitimate reasons (layoffs, funding falling through), and one recently laid off in a company-wide reduction. Neither is penalized on loyalty in practice — verified, not assumed.
+`data/candidates.json` has 23 candidates across both open roles, deliberately mixed:
+- **Senior Backend Engineer** (15 candidates) — **5 fraudulent**, covering distinct fraud patterns: title inflation, overlapping employment, keyword-stuffed templates (two candidates share near-identical text, submitted via the same staffing agency), and tenure/skill implausibility. **10 genuine**, including two built specifically to test the bias-awareness guardrail: one candidate who changed jobs three times in four years for stated legitimate reasons (layoffs, funding falling through), and one recently laid off in a company-wide reduction.
+- **Data Platform Engineer** (8 candidates) — **2 fraudulent** (a keyword-stuffed template, and overlapping full-time roles with an implausible seniority-to-experience ratio) and **6 genuine**, again including a job-hopper with stated legitimate reasons and a recent layoff.
+
+Neither bias-test pattern is penalized on loyalty in practice, on either role — verified, not assumed.
 
 ## Cost
 
-~$0.20 per full run (15 candidates × 3 agents, `gpt-4o`). Model tier is configurable via `.env` (`LARGE_MODEL`/`SMALL_MODEL`) — the two lighter-weight agents in the full design (source-channel stats, pipeline health, not yet built) are scoped to run on a small model per the cost-tiering principle in the architecture doc.
+~$0.32 for a full run across both roles (23 candidates × 3 agents, `gpt-4o`). Model tier is configurable via `.env` (`LARGE_MODEL`/`SMALL_MODEL`) — the two lighter-weight agents in the full design (source-channel stats, pipeline health, not yet built) are scoped to run on a small model per the cost-tiering principle in the architecture doc.
 
 ## Scope
 
-**Built:** the 3 core insight agents above, the shared contract, fraud-gated ranking, and the dashboard.
+**Built:** the 3 core insight agents above, the shared contract, fraud-gated ranking, the dashboard, and text/attachment JD intake (the "+ Add Requirement" form).
 
-**Deferred** (designed, documented, not implemented in this MVP — see the architecture doc for the full design): voice/text/document-upload intake, JD generation & publishing, the public resume-upload portal, the Source Channel Quality and Pipeline Health agents, the Evaluation/Routing/Optimization agents as separate components, Circuit Breaker enforcement (a retry cap is implemented per-agent-call; full cost-ceiling enforcement is not), n8n orchestration (this MVP orchestrates directly in Python).
+**Deferred** (designed, documented, not implemented in this MVP — see the architecture doc for the full design): voice intake (a grayed-out tab shows where it fits), automated JD generation from a brief (today's form is manual entry, not drafted for you), the public resume-upload portal, the Source Channel Quality and Pipeline Health agents, the Evaluation/Routing/Optimization agents as separate components, Circuit Breaker enforcement (a retry cap is implemented per-agent-call; full cost-ceiling enforcement is not), n8n orchestration (this MVP orchestrates directly in Python).
 
 This is a deliberate scope cut to get a working, demoable system built in the time available — not an oversight. The full architecture remains the intended design.

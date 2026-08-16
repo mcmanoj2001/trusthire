@@ -118,5 +118,69 @@
     "source_channel": "LinkedIn",
     "application_date": "2026-07-18",
     "resume_text": "QA Automation Engineer at Delft Software, Feb 2019 - Present (6.5 yrs). Built and maintain the company's end-to-end test automation suite in Python (Selenium, pytest); some exposure to backend services through test infrastructure work but no professional experience designing or building production backend systems. B.S. Computer Science, Iowa State University, 2018."
+  },
+  {
+    "candidate_id": "CAND_016",
+    "name": "Sofia Mercer",
+    "job_id": "JOB_002",
+    "source_channel": "Referral",
+    "application_date": "2026-07-21",
+    "resume_text": "Senior Data Engineer at Lumen Analytics, Jan 2021 - Present (5.6 yrs). Led migration of nightly batch ETL to an Airflow + dbt pipeline on Snowflake, cutting pipeline runtime from 6 hours to 45 minutes and eliminating three recurring data-quality incidents per month. Built and owns the team's data-quality framework (automated schema and freshness tests gating every pipeline deploy). Mentors two junior data engineers. Data Engineer at Fenwick Retail, Aug 2018 - Dec 2020 (2.4 yrs). Built Spark batch jobs processing 40M+ daily transaction records; introduced the team's first dbt-based transformation layer. B.S. Computer Science, University of Toronto, 2018."
+  },
+  {
+    "candidate_id": "CAND_017",
+    "name": "Kevin Osei",
+    "job_id": "JOB_002",
+    "source_channel": "LinkedIn",
+    "application_date": "2026-07-20",
+    "resume_text": "Data Engineer at Harborview Logistics, Feb 2022 - Present (4.5 yrs). Built and operate the company's core ETL pipelines moving shipment and inventory data from Postgres into a Redshift warehouse using Airflow, supporting daily reporting for the operations team. Data Analyst at Bramwell Foods, Jun 2019 - Jan 2022 (2.6 yrs). Wrote complex SQL for weekly sales reporting and built the team's first automated Airflow DAGs. B.A. Statistics, Ohio State University, 2019."
+  },
+  {
+    "candidate_id": "CAND_018",
+    "name": "Maya Lindstrom",
+    "job_id": "JOB_002",
+    "source_channel": "Company Careers Page",
+    "application_date": "2026-07-23",
+    "resume_text": "Senior Data Engineer at Nordkap Systems, May 2020 - Present (6.2 yrs). Owns the reliability of the company's core BigQuery data warehouse - built automated data-quality checks (dbt tests + Great Expectations) that cut undetected data incidents to zero over the past 18 months. Designed and led the streaming ingestion pipeline (Kafka -> BigQuery) for real-time inventory data. Data Engineer at Solvix Analytics, Mar 2017 - Apr 2020 (3.1 yrs). Built SQL-based ELT pipelines and dashboards for the finance team. M.S. Data Engineering, TU Delft, 2017."
+  },
+  {
+    "candidate_id": "CAND_019",
+    "name": "Priyanka Desai",
+    "job_id": "JOB_002",
+    "source_channel": "Referral",
+    "application_date": "2026-07-22",
+    "resume_text": "Data Engineer at Ashgrove Systems, Sep 2024 - Present (1.9 yrs). Owns the company's dbt-based transformation layer on Snowflake and the automated data-quality test suite gating every model deploy. Data Engineer at Kestrel Analytics, Jan 2023 - Aug 2024 (1.6 yrs) - left after the company's Series A funding fell through and the data team was eliminated in a company-wide reduction. Built and operated Airflow ETL pipelines processing 15M+ daily events. Data Engineer at Northfield Retail, Jun 2021 - Dec 2022 (1.5 yrs) - left after a 14-month fixed-term data migration contract ended as scoped. Built SQL-based ELT pipelines for merchandising reporting. B.S. Information Systems, University of Michigan, 2021."
+  },
+  {
+    "candidate_id": "CAND_020",
+    "name": "Owen Bryce",
+    "job_id": "JOB_002",
+    "source_channel": "Referral",
+    "application_date": "2026-07-24",
+    "resume_text": "Data Engineer at Marlstone Insurance, Apr 2021 - Present (5.3 yrs). Builds and maintains ETL pipelines (Airflow + dbt) moving claims data into Snowflake for the actuarial team; introduced automated data-quality tests catching malformed records before they reach downstream reports. Junior Data Engineer at Corvid Analytics, Jul 2019 - Mar 2021 (1.7 yrs). Wrote SQL transformations and maintained a legacy cron-based ETL system. B.S. Applied Mathematics, University of Waterloo, 2019."
+  },
+  {
+    "candidate_id": "CAND_021",
+    "name": "Isabelle Wren",
+    "job_id": "JOB_002",
+    "source_channel": "LinkedIn",
+    "application_date": "2026-07-20",
+    "resume_text": "Senior Data Engineer at Thornbury Analytics, Jun 2019 - Jun 2026 (7.0 yrs) - role eliminated in a company-wide 15% reduction after a Q2 2026 funding shortfall; last day was June 30, 2026. Owned the company's core ELT pipeline (Airflow + dbt on Snowflake) and its data-quality test suite, cutting pipeline incidents by 70% over three years. Led the migration from a legacy nightly batch job to a streaming Kafka-based ingestion pipeline. Data Analyst at Fennimore Group, Aug 2017 - May 2019 (1.8 yrs). Built SQL reporting pipelines for the finance team. B.S. Computer Science, McGill University, 2017."
+  },
+  {
+    "candidate_id": "CAND_022",
+    "name": "Trent Wolcott",
+    "job_id": "JOB_002",
+    "source_channel": "Apex Staffing Solutions",
+    "application_date": "2026-07-21",
+    "resume_text": "Data Engineer with expertise in Python, SQL, Spark, Airflow, dbt, Snowflake, BigQuery, Kafka, and cloud data platforms. Proven track record of building scalable, reliable, high-performance data pipelines and driving data-driven decision making across the organization. Skilled in ETL/ELT design, data warehousing, data quality, and cross-functional collaboration with engineering, product, and business stakeholders. Data Engineer at TechCore Solutions, Jan 2023 - Present. Data Engineer at Quantum Data Systems, Mar 2020 - Dec 2022. Strong communicator and team player passionate about leveraging data to drive business value. B.S. Computer Science."
+  },
+  {
+    "candidate_id": "CAND_023",
+    "name": "Dana Whitfield",
+    "job_id": "JOB_002",
+    "source_channel": "Apex Staffing Solutions",
+    "application_date": "2026-07-23",
+    "resume_text": "Lead Data Engineer at Vantage Digital, Jan 2023 - Present (3.5 yrs) - architected the company's entire data platform from scratch, leading a team of 6 data engineers. Senior Data Engineer at Bright Path Analytics, Aug 2022 - Present (3.9 yrs) - owns all production ETL pipelines and data-quality tooling. Data Engineer at Fabrik Systems, Feb 2021 - Jan 2023 (2.0 yrs). B.S. Data Science, 2021."
   }
 ]

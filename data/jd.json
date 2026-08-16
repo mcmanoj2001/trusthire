@@ -18,5 +18,25 @@
       "Mentoring or onboarding experience"
     ],
     "description": "Meridian Consulting Group is hiring a Senior Backend Engineer to join a client-facing engineering pod. You'll design and operate distributed backend systems, work directly with client engineering teams, and be expected to lead technical decisions on your projects with minimal oversight."
+  },
+  {
+    "job_id": "JOB_002",
+    "title": "Data Platform Engineer",
+    "company": "Meridian Consulting Group",
+    "department": "Data & Analytics",
+    "location": "Remote (US)",
+    "posted_date": "2026-07-18",
+    "must_haves": [
+      "4+ years professional data engineering experience",
+      "Hands-on experience building and operating production ETL/ELT pipelines",
+      "Strong SQL and at least one modern data processing framework (Spark, dbt, or Airflow)",
+      "Has owned data quality or pipeline reliability for a production system"
+    ],
+    "nice_to_haves": [
+      "Cloud data warehouse experience (Snowflake, BigQuery, or Redshift)",
+      "Experience with streaming data pipelines (Kafka, Kinesis)",
+      "Experience mentoring or leading other engineers"
+    ],
+    "description": "Meridian Consulting Group is hiring a Data Platform Engineer to join the firm's Data & Analytics practice. You'll build and operate the ETL/ELT pipelines that power client-facing reporting and analytics, own data quality end-to-end, and work directly with client stakeholders to translate business questions into reliable data infrastructure."
   }
 ]
