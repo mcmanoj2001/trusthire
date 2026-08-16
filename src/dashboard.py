@@ -58,6 +58,13 @@ footer {{visibility: hidden;}}
 }}
 .stat-tile .label {{ color: {INK_SECONDARY}; font-size: 0.82rem; margin-bottom: 4px; }}
 .stat-tile .value {{ color: {INK}; font-size: 1.7rem; font-weight: 600; line-height: 1.1; }}
+.cost-strip {{
+    display: inline-flex; align-items: center; float: right;
+    border: 1px solid {BORDER}; border-radius: 8px; padding: 7px 14px;
+    background: transparent;
+}}
+.cost-strip-label {{ color: {INK_MUTED}; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.03em; }}
+.cost-strip-value {{ color: {INK_SECONDARY}; font-size: 0.95rem; font-weight: 600; }}
 .meta-line {{ color: {INK_SECONDARY}; font-size: 0.88rem; }}
 .section-label {{
     color: {INK_MUTED}; font-size: 0.78rem; text-transform: uppercase;
@@ -132,6 +139,19 @@ def fit_meter(score: int) -> str:
 
 def stat_tile(label: str, value: str) -> str:
     return f'<div class="stat-tile"><div class="label">{label}</div><div class="value">{value}</div></div>'
+
+
+def cost_strip(total: float, avg: float | None = None) -> str:
+    """Deliberately smaller and quieter than stat_tile - cost is good-to-know
+    operational context here, not one of the business decisions this dashboard
+    is for. Never given the same visual weight as fit/leadership/loyalty/flags."""
+    avg_html = ""
+    if avg is not None:
+        avg_html = (f'<div style="width:1px;align-self:stretch;background:{BORDER};margin:0 10px;"></div>'
+                    f'<div><div class="cost-strip-label">avg / candidate</div>'
+                    f'<div class="cost-strip-value">${avg:.4f}</div></div>')
+    return (f'<div class="cost-strip"><div><div class="cost-strip-label">cost of analysis</div>'
+            f'<div class="cost-strip-value">${total:.4f}</div></div>{avg_html}</div>')
 
 
 # ---------------------------------------------------------------------------
@@ -216,15 +236,18 @@ def view_candidates():
     if st.button("← All Requirements"):
         go("requirements")
 
-    st.title(jd["title"])
-    st.caption(f'{jd["company"]} &middot; {len(job_results)} candidates scored')
+    title_col, cost_col = st.columns([3, 1])
+    with title_col:
+        st.title(jd["title"])
+        st.caption(f'{jd["company"]} &middot; {len(job_results)} candidates scored')
+    with cost_col:
+        st.write("")
+        avg_cost = (total_cost / len(job_results)) if job_results else 0
+        st.markdown(cost_strip(total_cost, avg_cost), unsafe_allow_html=True)
 
-    c1, c2, c3, c4 = st.columns(4)
-    c1.markdown(stat_tile("Total cost", f"${total_cost:.4f}"), unsafe_allow_html=True)
-    c2.markdown(stat_tile("Avg cost / candidate",
-                f"${(total_cost / len(job_results)):.4f}" if job_results else "$0"), unsafe_allow_html=True)
-    c3.markdown(stat_tile("Flagged for review", str(len(flagged))), unsafe_allow_html=True)
-    c4.markdown(stat_tile("Ranked shortlist", str(len(rankable))), unsafe_allow_html=True)
+    c1, c2 = st.columns(2)
+    c1.markdown(stat_tile("Flagged for review", str(len(flagged))), unsafe_allow_html=True)
+    c2.markdown(stat_tile("Ranked shortlist", str(len(rankable))), unsafe_allow_html=True)
     st.write("")
 
     st.markdown('<div class="section-label">Ranked shortlist &mdash; by fit score</div>', unsafe_allow_html=True)
@@ -329,8 +352,8 @@ def view_profile():
         st.write("")
         st.markdown(stat_tile("Loyalty", f'{r["loyalty_score"]:.2f}'), unsafe_allow_html=True)
         st.write("")
-        st.markdown(stat_tile("Cost of insight (3 agents)", f'${r["total_cost_usd"]:.4f}'),
-                    unsafe_allow_html=True)
+        st.markdown(cost_strip(r["total_cost_usd"]), unsafe_allow_html=True)
+        st.write("")
         st.write("")
         st.markdown("**Recruiter decision**")
 
