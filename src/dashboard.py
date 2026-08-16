@@ -99,6 +99,17 @@ def log_feedback(candidate_id: str, decision: str, stated_confidence: float):
     FEEDBACK_LOG_PATH.write_text(json.dumps(log, indent=2))
 
 
+def load_feedback() -> dict:
+    """Not cached - must reflect writes from this same session immediately."""
+    if not FEEDBACK_LOG_PATH.exists():
+        return {}
+    log = json.loads(FEEDBACK_LOG_PATH.read_text())
+    latest = {}
+    for entry in log:  # log is append-only in chronological order; later entries win
+        latest[entry["candidate_id"]] = entry
+    return latest
+
+
 # ---------------------------------------------------------------------------
 # Small components
 # ---------------------------------------------------------------------------
@@ -143,6 +154,17 @@ def go(view: str, **kwargs):
 jds, candidates, results = load_data()
 jds_by_id = {j["job_id"]: j for j in jds}
 candidates_by_id = {c["candidate_id"]: c for c in candidates}
+feedback = load_feedback()
+
+
+def reviewed_tag(candidate_id: str) -> str | None:
+    fb = feedback.get(candidate_id)
+    if not fb:
+        return None
+    color = "#0ca30c" if fb["decision"] == "accepted" else "#fab219"
+    icon = "✅" if fb["decision"] == "accepted" else "↩️"
+    label = "Accepted" if fb["decision"] == "accepted" else "Overridden"
+    return f'<span class="status-badge" style="background:{color}22;color:{color};border:1px solid {color}66;">{icon} {label}</span>'
 
 
 # ---------------------------------------------------------------------------
@@ -224,6 +246,9 @@ def view_candidates():
             with cols[4]:
                 if r["fraud_risk"] == "medium":
                     st.markdown(status_badge("medium"), unsafe_allow_html=True)
+                tag = reviewed_tag(r["candidate_id"])
+                if tag:
+                    st.markdown(tag, unsafe_allow_html=True)
                 if st.button("View Profile →", key=f"prof_{r['candidate_id']}"):
                     go("profile", candidate_id=r["candidate_id"])
 
@@ -233,13 +258,17 @@ def view_candidates():
                     f'&mdash; excluded from ranking above</div>', unsafe_allow_html=True)
         for r in flagged:
             with st.container(border=True):
-                cols = st.columns([3, 2.5, 1.5])
+                cols = st.columns([2.6, 1.7, 1.7, 1.5])
                 with cols[0]:
                     st.markdown(f"**{r['name']}**")
                     st.caption(r["source_channel"])
                 with cols[1]:
                     st.markdown(status_badge("high"), unsafe_allow_html=True)
                 with cols[2]:
+                    tag = reviewed_tag(r["candidate_id"])
+                    if tag:
+                        st.markdown(tag, unsafe_allow_html=True)
+                with cols[3]:
                     if st.button("View Profile →", key=f"prof_{r['candidate_id']}"):
                         go("profile", candidate_id=r["candidate_id"])
 
@@ -304,13 +333,25 @@ def view_profile():
                     unsafe_allow_html=True)
         st.write("")
         st.markdown("**Recruiter decision**")
+
+        existing = feedback.get(r["candidate_id"])
+        if existing:
+            ts = datetime.fromisoformat(existing["timestamp"]).strftime("%b %d, %I:%M %p UTC")
+            if existing["decision"] == "accepted":
+                st.success(f"✅ Accepted — logged {ts}")
+            else:
+                st.warning(f"↩️ Overridden — logged {ts}")
+            st.caption("Click either button below to change this decision.")
+        else:
+            st.caption("Not yet reviewed.")
+
         bc1, bc2 = st.columns(2)
         if bc1.button("✅ Accept", key=f"accept_{r['candidate_id']}"):
             log_feedback(r["candidate_id"], "accepted", r["raw"]["fit"]["confidence_score"])
-            st.toast(f"Logged: accepted {r['name']}")
+            st.rerun()
         if bc2.button("↩️ Override", key=f"override_{r['candidate_id']}"):
             log_feedback(r["candidate_id"], "overridden", r["raw"]["fit"]["confidence_score"])
-            st.toast(f"Logged: overrode {r['name']}")
+            st.rerun()
 
 
 # ---------------------------------------------------------------------------
