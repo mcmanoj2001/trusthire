@@ -1,0 +1,1451 @@
+[
+  {
+    "candidate_id": "CAND_001",
+    "name": "Priya Nathan",
+    "source_channel": "Referral",
+    "fraud_risk": "low",
+    "fraud_flags": [],
+    "fraud_recommendation": "Advance normally",
+    "fit_score": 95,
+    "requirements_met": [
+      "5+ years professional backend engineering experience",
+      "Hands-on distributed systems experience (not just theoretical)",
+      "Strong Python or Go",
+      "Has led at least one significant technical initiative or a team, formally or informally",
+      "Mentoring or onboarding experience"
+    ],
+    "requirements_missing": [],
+    "leadership_score": 0.9,
+    "loyalty_score": 0.9,
+    "trait_caveats": [
+      "Leadership score is inferred from resume text alone, not verified with references.",
+      "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+    ],
+    "total_cost_usd": 0.014367,
+    "raw": {
+      "fraud": {
+        "candidate_id": "CAND_001",
+        "recommendation": "Advance normally",
+        "evidence": [
+          "Senior Backend Engineer at Ferrovia Systems, Mar 2022 - Present (3.4 yrs)",
+          "Led the migration of Ferrovia's monolithic order-processing service to a distributed, event-driven architecture (Kafka + Go), cutting P99 latency by 40%",
+          "Backend Engineer at Doric Software, Jun 2019 - Feb 2022 (2.7 yrs)",
+          "B.S. Computer Science, Rutgers University, 2019"
+        ],
+        "confidence_score": 0.95,
+        "cost_of_insight": {
+          "tokens_in": 1206,
+          "tokens_out": 171,
+          "model": "gpt-4o",
+          "est_usd": 0.004725
+        },
+        "alternative": "A regex-only date-overlap check would confirm timeline accuracy but miss the detailed project evidence.",
+        "fraud_risk": "low",
+        "fraud_flags": []
+      },
+      "fit": {
+        "candidate_id": "CAND_001",
+        "recommendation": "Strong fit - advance to technical screen",
+        "evidence": [
+          "Senior Backend Engineer at Ferrovia Systems, Mar 2022 - Present (3.4 yrs)",
+          "Backend Engineer at Doric Software, Jun 2019 - Feb 2022 (2.7 yrs)",
+          "Led the migration of Ferrovia's monolithic order-processing service to a distributed, event-driven architecture (Kafka + Go)",
+          "Managed a rotating on-call for the 4-person platform team and mentored two junior engineers",
+          "Built and operated Python/Django services handling ~2M requests/day"
+        ],
+        "confidence_score": 0.95,
+        "cost_of_insight": {
+          "tokens_in": 1130,
+          "tokens_out": 245,
+          "model": "gpt-4o",
+          "est_usd": 0.005275
+        },
+        "alternative": "Use a keyword-based filter to quickly identify resumes mentioning 'distributed systems' and 'Python or Go', but this may miss nuanced experience.",
+        "fit_score": 95,
+        "requirements_met": [
+          "5+ years professional backend engineering experience",
+          "Hands-on distributed systems experience (not just theoretical)",
+          "Strong Python or Go",
+          "Has led at least one significant technical initiative or a team, formally or informally",
+          "Mentoring or onboarding experience"
+        ],
+        "requirements_missing": []
+      },
+      "traits": {
+        "candidate_id": "CAND_001",
+        "recommendation": "Consider this candidate for roles requiring technical leadership and mentorship, as they demonstrate strong leadership and stable tenure.",
+        "evidence": [
+          "Led the migration of Ferrovia's monolithic order-processing service to a distributed, event-driven architecture.",
+          "Managed a rotating on-call for the 4-person platform team and mentored two junior engineers.",
+          "Tenure at Ferrovia Systems: 3.4 years.",
+          "Tenure at Doric Software: 2.7 years."
+        ],
+        "confidence_score": 0.9,
+        "cost_of_insight": {
+          "tokens_in": 939,
+          "tokens_out": 202,
+          "model": "gpt-4o",
+          "est_usd": 0.004367
+        },
+        "alternative": "Conduct a brief phone interview focusing on leadership experiences to validate inferred leadership skills.",
+        "leadership_score": 0.9,
+        "loyalty_score": 0.9,
+        "caveats": [
+          "Leadership score is inferred from resume text alone, not verified with references.",
+          "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+        ]
+      }
+    }
+  },
+  {
+    "candidate_id": "CAND_002",
+    "name": "Marcus Wei",
+    "source_channel": "QuickApply Staffing Agency",
+    "fraud_risk": "high",
+    "fraud_flags": [
+      "Implausible claim of 10+ years of Kubernetes expertise with only 3 years of total experience.",
+      "Title inflation: Senior Staff Engineer with only 1 year of post-graduation experience.",
+      "Keyword-stuffing: generic phrases like 'planet-scale infrastructure' without specific metrics or systems."
+    ],
+    "fraud_recommendation": "Flag for manual verification before advancing - explain the discrepancy in screening",
+    "fit_score": 95,
+    "requirements_met": [
+      "5+ years professional backend engineering experience",
+      "Hands-on distributed systems experience (not just theoretical)",
+      "Strong Python or Go",
+      "Has led at least one significant technical initiative or a team, formally or informally",
+      "Kubernetes / container orchestration"
+    ],
+    "requirements_missing": [],
+    "leadership_score": 0.9,
+    "loyalty_score": 0.5,
+    "trait_caveats": [
+      "Leadership score is inferred from resume text alone, not verified with references.",
+      "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+    ],
+    "total_cost_usd": 0.013735,
+    "raw": {
+      "fraud": {
+        "candidate_id": "CAND_002",
+        "recommendation": "Flag for manual verification before advancing - explain the discrepancy in screening",
+        "evidence": [
+          "Senior Staff Engineer at Vantify Inc, Aug 2025 - Present, claims 10+ years of Kubernetes expertise, but only 3 years of total experience since Jun 2023.",
+          "B.S. Computer Science, expected graduation 2024, but already working as a Senior Staff Engineer."
+        ],
+        "confidence_score": 0.95,
+        "cost_of_insight": {
+          "tokens_in": 1165,
+          "tokens_out": 217,
+          "model": "gpt-4o",
+          "est_usd": 0.005083
+        },
+        "alternative": "A regex-only date-overlap check would catch the timeline issue for near-zero cost but would miss the keyword-stuffing signal",
+        "fraud_risk": "high",
+        "fraud_flags": [
+          "Implausible claim of 10+ years of Kubernetes expertise with only 3 years of total experience.",
+          "Title inflation: Senior Staff Engineer with only 1 year of post-graduation experience.",
+          "Keyword-stuffing: generic phrases like 'planet-scale infrastructure' without specific metrics or systems."
+        ]
+      },
+      "fit": {
+        "candidate_id": "CAND_002",
+        "recommendation": "Strong fit - advance to technical screen",
+        "evidence": [
+          "Senior Staff Engineer at Vantify Inc, Aug 2025 - Present. Sole owner of Vantify's entire distributed systems strategy.",
+          "10+ years of deep Kubernetes expertise architecting planet-scale infrastructure.",
+          "Built scalable microservices at BrightPath LLC, Jan 2024 - Aug 2025."
+        ],
+        "confidence_score": 0.9,
+        "cost_of_insight": {
+          "tokens_in": 1086,
+          "tokens_out": 197,
+          "model": "gpt-4o",
+          "est_usd": 0.004685
+        },
+        "alternative": "Use a keyword-based resume parser to quickly identify potential matches, but this may miss nuanced experience descriptions.",
+        "fit_score": 95,
+        "requirements_met": [
+          "5+ years professional backend engineering experience",
+          "Hands-on distributed systems experience (not just theoretical)",
+          "Strong Python or Go",
+          "Has led at least one significant technical initiative or a team, formally or informally",
+          "Kubernetes / container orchestration"
+        ],
+        "requirements_missing": []
+      },
+      "traits": {
+        "candidate_id": "CAND_002",
+        "recommendation": "Consider this candidate for roles requiring strong technical leadership and strategic ownership, but verify loyalty through references due to limited tenure data.",
+        "evidence": [
+          "Sole owner of Vantify's entire distributed systems strategy",
+          "10+ years of deep Kubernetes expertise",
+          "Built scalable microservices at BrightPath LLC"
+        ],
+        "confidence_score": 0.7,
+        "cost_of_insight": {
+          "tokens_in": 895,
+          "tokens_out": 173,
+          "model": "gpt-4o",
+          "est_usd": 0.003967
+        },
+        "alternative": "Conduct a brief phone interview to quickly assess leadership and loyalty traits directly from the candidate.",
+        "leadership_score": 0.9,
+        "loyalty_score": 0.5,
+        "caveats": [
+          "Leadership score is inferred from resume text alone, not verified with references.",
+          "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+        ]
+      }
+    }
+  },
+  {
+    "candidate_id": "CAND_003",
+    "name": "Helena Brookes",
+    "source_channel": "LinkedIn",
+    "fraud_risk": "low",
+    "fraud_flags": [],
+    "fraud_recommendation": "Advance normally",
+    "fit_score": 40,
+    "requirements_met": [
+      "5+ years professional backend engineering experience"
+    ],
+    "requirements_missing": [
+      "Hands-on distributed systems experience (not just theoretical)",
+      "Strong Python or Go",
+      "Has led at least one significant technical initiative or a team, formally or informally",
+      "Kubernetes / container orchestration",
+      "Cloud infrastructure (AWS or GCP)",
+      "Mentoring or onboarding experience"
+    ],
+    "leadership_score": 0.4,
+    "loyalty_score": 1.0,
+    "trait_caveats": [
+      "Leadership score is inferred from resume text alone, not verified with references.",
+      "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+    ],
+    "total_cost_usd": 0.013455,
+    "raw": {
+      "fraud": {
+        "candidate_id": "CAND_003",
+        "recommendation": "Advance normally",
+        "evidence": [
+          "Software Engineer II at Allenport Retail, Jan 2021 - Present (4.6 yrs)",
+          "Software Engineer at Bellcrest Media, Jul 2018 - Dec 2020 (2.4 yrs)",
+          "B.A. Computer Science, Oberlin College, 2018"
+        ],
+        "confidence_score": 0.95,
+        "cost_of_insight": {
+          "tokens_in": 1165,
+          "tokens_out": 141,
+          "model": "gpt-4o",
+          "est_usd": 0.004322
+        },
+        "alternative": "A regex-only date-overlap check would confirm timeline consistency but miss any keyword-stuffing issues.",
+        "fraud_risk": "low",
+        "fraud_flags": []
+      },
+      "fit": {
+        "candidate_id": "CAND_003",
+        "recommendation": "Missing distributed systems requirement - would need to probe this specifically in screening",
+        "evidence": [
+          "Software Engineer II at Allenport Retail, Jan 2021 - Present (4.6 yrs). Maintain and extend a monolithic Ruby on Rails e-commerce platform.",
+          "Software Engineer at Bellcrest Media, Jul 2018 - Dec 2020 (2.4 yrs). General backend development in Ruby."
+        ],
+        "confidence_score": 0.8,
+        "cost_of_insight": {
+          "tokens_in": 1088,
+          "tokens_out": 227,
+          "model": "gpt-4o",
+          "est_usd": 0.00499
+        },
+        "alternative": "A faster option is to use a keyword search for 'distributed systems' and 'Python or Go', but this risks missing nuanced experience descriptions.",
+        "fit_score": 40,
+        "requirements_met": [
+          "5+ years professional backend engineering experience"
+        ],
+        "requirements_missing": [
+          "Hands-on distributed systems experience (not just theoretical)",
+          "Strong Python or Go",
+          "Has led at least one significant technical initiative or a team, formally or informally",
+          "Kubernetes / container orchestration",
+          "Cloud infrastructure (AWS or GCP)",
+          "Mentoring or onboarding experience"
+        ]
+      },
+      "traits": {
+        "candidate_id": "CAND_003",
+        "recommendation": "Consider this candidate for roles that value stability and independent module ownership, but verify leadership potential through interviews or references.",
+        "evidence": [
+          "Software Engineer II at Allenport Retail, Jan 2021 - Present (4.6 yrs)",
+          "Software Engineer at Bellcrest Media, Jul 2018 - Dec 2020 (2.4 yrs)"
+        ],
+        "confidence_score": 0.8,
+        "cost_of_insight": {
+          "tokens_in": 897,
+          "tokens_out": 190,
+          "model": "gpt-4o",
+          "est_usd": 0.004143
+        },
+        "alternative": "Conduct a brief phone interview to assess leadership qualities directly, which is faster but may miss nuanced team dynamics.",
+        "leadership_score": 0.4,
+        "loyalty_score": 1.0,
+        "caveats": [
+          "Leadership score is inferred from resume text alone, not verified with references.",
+          "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+        ]
+      }
+    }
+  },
+  {
+    "candidate_id": "CAND_004",
+    "name": "Jordan Ellis",
+    "source_channel": "QuickApply Staffing Agency",
+    "fraud_risk": "high",
+    "fraud_flags": [
+      "Keyword-stuffing across all roles with no concrete metrics or outcomes.",
+      "Repetitive, generic phrasing across multiple job entries."
+    ],
+    "fraud_recommendation": "Flag for manual verification before advancing - explain the keyword-stuffing and lack of concrete metrics.",
+    "fit_score": 75,
+    "requirements_met": [
+      "5+ years professional backend engineering experience",
+      "Hands-on distributed systems experience (not just theoretical)",
+      "Strong Python or Go",
+      "Kubernetes / container orchestration",
+      "Cloud infrastructure (AWS or GCP)"
+    ],
+    "requirements_missing": [
+      "Has led at least one significant technical initiative or a team, formally or informally"
+    ],
+    "leadership_score": 0.7,
+    "loyalty_score": 1.0,
+    "trait_caveats": [
+      "Leadership score is inferred from resume text alone, not verified with references.",
+      "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+    ],
+    "total_cost_usd": 0.015944,
+    "raw": {
+      "fraud": {
+        "candidate_id": "CAND_004",
+        "recommendation": "Flag for manual verification before advancing - explain the keyword-stuffing and lack of concrete metrics.",
+        "evidence": [
+          "Senior Backend Engineer, Jan 2022 - Jan 2024. Results-driven, highly motivated senior backend engineer with proven expertise in distributed systems, Python, Go, Kubernetes, AWS, GCP, microservices, leadership, and cross-functional collaboration.",
+          "Backend Engineer, Jan 2020 - Jan 2022. Results-driven backend engineer with strong distributed systems, Python, Go, Kubernetes, AWS, GCP, and microservices background.",
+          "Software Engineer, Jan 2018 - Jan 2020. Results-driven software engineer skilled in distributed systems, Python, Go, and cloud infrastructure."
+        ],
+        "confidence_score": 0.95,
+        "cost_of_insight": {
+          "tokens_in": 1189,
+          "tokens_out": 246,
+          "model": "gpt-4o",
+          "est_usd": 0.005432
+        },
+        "alternative": "A keyword density analysis tool could quickly flag the repetitive buzzword usage but would miss the lack of concrete metrics.",
+        "fraud_risk": "high",
+        "fraud_flags": [
+          "Keyword-stuffing across all roles with no concrete metrics or outcomes.",
+          "Repetitive, generic phrasing across multiple job entries."
+        ]
+      },
+      "fit": {
+        "candidate_id": "CAND_004",
+        "recommendation": "Missing evidence of leading a significant initiative or team - would need to probe this specifically in screening.",
+        "evidence": [
+          "Senior Backend Engineer, Jan 2022 - Jan 2024. Results-driven, highly motivated senior backend engineer with proven expertise in distributed systems, Python, Go, Kubernetes, AWS, GCP, microservices, leadership, and cross-functional collaboration.",
+          "Backend Engineer, Jan 2020 - Jan 2022. Results-driven backend engineer with strong distributed systems, Python, Go, Kubernetes, AWS, GCP, and microservices background.",
+          "Software Engineer, Jan 2018 - Jan 2020. Results-driven software engineer skilled in distributed systems, Python, Go, and cloud infrastructure."
+        ],
+        "confidence_score": 0.7,
+        "cost_of_insight": {
+          "tokens_in": 1110,
+          "tokens_out": 282,
+          "model": "gpt-4o",
+          "est_usd": 0.005595
+        },
+        "alternative": "Use a keyword search for 'lead' or 'initiative' to quickly filter resumes, but this may miss context or informal leadership roles.",
+        "fit_score": 75,
+        "requirements_met": [
+          "5+ years professional backend engineering experience",
+          "Hands-on distributed systems experience (not just theoretical)",
+          "Strong Python or Go",
+          "Kubernetes / container orchestration",
+          "Cloud infrastructure (AWS or GCP)"
+        ],
+        "requirements_missing": [
+          "Has led at least one significant technical initiative or a team, formally or informally"
+        ]
+      },
+      "traits": {
+        "candidate_id": "CAND_004",
+        "recommendation": "Consider for roles requiring technical leadership and stability, as the candidate shows growth and consistent tenure.",
+        "evidence": [
+          "Senior Backend Engineer, Jan 2022 - Jan 2024. Results-driven, highly motivated senior backend engineer with proven expertise in distributed systems, Python, Go, Kubernetes, AWS, GCP, microservices, leadership, and cross-functional collaboration.",
+          "Backend Engineer, Jan 2020 - Jan 2022. Results-driven backend engineer with strong distributed systems, Python, Go, Kubernetes, AWS, GCP, and microservices background.",
+          "Software Engineer, Jan 2018 - Jan 2020. Results-driven software engineer skilled in distributed systems, Python, Go, and cloud infrastructure."
+        ],
+        "confidence_score": 0.8,
+        "cost_of_insight": {
+          "tokens_in": 919,
+          "tokens_out": 262,
+          "model": "gpt-4o",
+          "est_usd": 0.004917
+        },
+        "alternative": "Conduct a brief phone interview to assess leadership qualities directly, which is faster but less comprehensive than a full interview process.",
+        "leadership_score": 0.7,
+        "loyalty_score": 1.0,
+        "caveats": [
+          "Leadership score is inferred from resume text alone, not verified with references.",
+          "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+        ]
+      }
+    }
+  },
+  {
+    "candidate_id": "CAND_005",
+    "name": "Aisha Bello",
+    "source_channel": "Company Careers Page",
+    "fraud_risk": "low",
+    "fraud_flags": [],
+    "fraud_recommendation": "Advance normally",
+    "fit_score": 85,
+    "requirements_met": [
+      "Hands-on distributed systems experience (not just theoretical)",
+      "Strong Python or Go",
+      "Has led at least one significant technical initiative or a team, formally or informally"
+    ],
+    "requirements_missing": [
+      "5+ years professional backend engineering experience (4.9 years total)"
+    ],
+    "leadership_score": 0.9,
+    "loyalty_score": 1.0,
+    "trait_caveats": [
+      "Leadership score is inferred from resume text alone, not verified with references.",
+      "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+    ],
+    "total_cost_usd": 0.014352,
+    "raw": {
+      "fraud": {
+        "candidate_id": "CAND_005",
+        "recommendation": "Advance normally",
+        "evidence": [
+          "Tech Lead at Solvent Data, Sep 2024 - Jun 2026 (1.8 yrs), role ended in restructuring",
+          "Senior Engineer at Almora Tech, Feb 2023 - Aug 2024 (1.5 yrs), funding fell through",
+          "Backend Engineer at Ferro Labs, Jun 2021 - Jan 2023 (1.6 yrs), promoted twice",
+          "B.S. Computer Science, Georgia Tech, 2021"
+        ],
+        "confidence_score": 0.95,
+        "cost_of_insight": {
+          "tokens_in": 1232,
+          "tokens_out": 171,
+          "model": "gpt-4o",
+          "est_usd": 0.00479
+        },
+        "alternative": "A regex-only date-overlap check would confirm timeline accuracy but miss context on role changes.",
+        "fraud_risk": "low",
+        "fraud_flags": []
+      },
+      "fit": {
+        "candidate_id": "CAND_005",
+        "recommendation": "Strong fit - advance to technical screen",
+        "evidence": [
+          "Tech Lead at Solvent Data: Led a 5-engineer team building Solvent's real-time analytics pipeline on distributed streaming infrastructure.",
+          "Senior Engineer at Almora Tech: 1.5 yrs",
+          "Backend Engineer at Ferro Labs: 1.6 yrs",
+          "Total experience: 1.8 yrs + 1.5 yrs + 1.6 yrs = 4.9 yrs",
+          "Led a 5-engineer team at Solvent Data",
+          "Led on-call rotation and trained 3 new hires at Ferro Labs"
+        ],
+        "confidence_score": 0.9,
+        "cost_of_insight": {
+          "tokens_in": 1154,
+          "tokens_out": 243,
+          "model": "gpt-4o",
+          "est_usd": 0.005315
+        },
+        "alternative": "A faster option could be a keyword-based filter, but it might miss nuanced leadership or distributed systems experience.",
+        "fit_score": 85,
+        "requirements_met": [
+          "Hands-on distributed systems experience (not just theoretical)",
+          "Strong Python or Go",
+          "Has led at least one significant technical initiative or a team, formally or informally"
+        ],
+        "requirements_missing": [
+          "5+ years professional backend engineering experience (4.9 years total)"
+        ]
+      },
+      "traits": {
+        "candidate_id": "CAND_005",
+        "recommendation": "Consider this candidate for roles requiring leadership in technical teams, as they have demonstrated team leadership and mentoring skills.",
+        "evidence": [
+          "Led a 5-engineer team building Solvent's real-time analytics pipeline.",
+          "Promoted twice at Ferro Labs and led the on-call rotation, trained 3 new hires."
+        ],
+        "confidence_score": 0.9,
+        "cost_of_insight": {
+          "tokens_in": 963,
+          "tokens_out": 184,
+          "model": "gpt-4o",
+          "est_usd": 0.004247
+        },
+        "alternative": "Conduct a brief phone interview to verify leadership experiences and reasons for leaving roles, which could provide more context than the resume alone.",
+        "leadership_score": 0.9,
+        "loyalty_score": 1.0,
+        "caveats": [
+          "Leadership score is inferred from resume text alone, not verified with references.",
+          "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+        ]
+      }
+    }
+  },
+  {
+    "candidate_id": "CAND_006",
+    "name": "Tom Halvorsen",
+    "source_channel": "LinkedIn",
+    "fraud_risk": "low",
+    "fraud_flags": [],
+    "fraud_recommendation": "Advance normally",
+    "fit_score": 95,
+    "requirements_met": [
+      "5+ years professional backend engineering experience",
+      "Hands-on distributed systems experience (not just theoretical)",
+      "Strong Python or Go",
+      "Has led at least one significant technical initiative or a team, formally or informally",
+      "Mentoring or onboarding experience"
+    ],
+    "requirements_missing": [],
+    "leadership_score": 0.8,
+    "loyalty_score": 1.0,
+    "trait_caveats": [
+      "Leadership score is inferred from resume text alone, not verified with references.",
+      "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+    ],
+    "total_cost_usd": 0.012777,
+    "raw": {
+      "fraud": {
+        "candidate_id": "CAND_006",
+        "recommendation": "Advance normally",
+        "evidence": [
+          "Backend Engineer at Kestrel Financial, Aug 2018 - Present (7.9 yrs)",
+          "B.S. Information Systems, University of Minnesota, 2018"
+        ],
+        "confidence_score": 0.95,
+        "cost_of_insight": {
+          "tokens_in": 1156,
+          "tokens_out": 116,
+          "model": "gpt-4o",
+          "est_usd": 0.00405
+        },
+        "alternative": "A regex-only date-overlap check would confirm timeline consistency but would not assess content quality.",
+        "fraud_risk": "low",
+        "fraud_flags": []
+      },
+      "fit": {
+        "candidate_id": "CAND_006",
+        "recommendation": "Strong fit - advance to technical screen",
+        "evidence": [
+          "7.9 years at Kestrel Financial as a Backend Engineer, meeting the 5+ years requirement.",
+          "Work primarily in Python on a distributed transaction-processing system, meeting the distributed systems and Python requirements.",
+          "Informally mentored 6 engineers and is the go-to person for onboarding, indicating leadership and mentoring experience."
+        ],
+        "confidence_score": 0.9,
+        "cost_of_insight": {
+          "tokens_in": 1079,
+          "tokens_out": 208,
+          "model": "gpt-4o",
+          "est_usd": 0.004777
+        },
+        "alternative": "A faster option would be to conduct a brief phone screen focusing on distributed systems and leadership experience, but this may miss nuanced evidence from the resume.",
+        "fit_score": 95,
+        "requirements_met": [
+          "5+ years professional backend engineering experience",
+          "Hands-on distributed systems experience (not just theoretical)",
+          "Strong Python or Go",
+          "Has led at least one significant technical initiative or a team, formally or informally",
+          "Mentoring or onboarding experience"
+        ],
+        "requirements_missing": []
+      },
+      "traits": {
+        "candidate_id": "CAND_006",
+        "recommendation": "Consider this candidate for roles requiring mentorship and technical leadership without formal management responsibilities.",
+        "evidence": [
+          "Long-tenured member of the core banking-services team at Kestrel Financial for 7.9 years.",
+          "Informally mentored 6 engineers and is the go-to person for new hires during onboarding."
+        ],
+        "confidence_score": 0.9,
+        "cost_of_insight": {
+          "tokens_in": 888,
+          "tokens_out": 173,
+          "model": "gpt-4o",
+          "est_usd": 0.00395
+        },
+        "alternative": "Conduct a short interview focused on mentorship experiences to validate inferred leadership skills.",
+        "leadership_score": 0.8,
+        "loyalty_score": 1.0,
+        "caveats": [
+          "Leadership score is inferred from resume text alone, not verified with references.",
+          "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+        ]
+      }
+    }
+  },
+  {
+    "candidate_id": "CAND_007",
+    "name": "Daniel Cho",
+    "source_channel": "LinkedIn",
+    "fraud_risk": "high",
+    "fraud_flags": [
+      "Full-time role overlap: Senior Backend Engineer and MBA program from Aug 2021 to May 2023."
+    ],
+    "fraud_recommendation": "Flag for manual verification before advancing - explain the full-time overlap between MBA and Senior Backend Engineer role.",
+    "fit_score": 90,
+    "requirements_met": [
+      "5+ years professional backend engineering experience",
+      "Hands-on distributed systems experience (not just theoretical)",
+      "Strong Python or Go",
+      "Has led at least one significant technical initiative or a team, formally or informally"
+    ],
+    "requirements_missing": [],
+    "leadership_score": 0.9,
+    "loyalty_score": 0.9,
+    "trait_caveats": [
+      "Leadership score is inferred from resume text alone, not verified with references.",
+      "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+    ],
+    "total_cost_usd": 0.013057,
+    "raw": {
+      "fraud": {
+        "candidate_id": "CAND_007",
+        "recommendation": "Flag for manual verification before advancing - explain the full-time overlap between MBA and Senior Backend Engineer role.",
+        "evidence": [
+          "Senior Backend Engineer at Praxis Systems, Jun 2021 - Present (4.6 yrs)",
+          "Full-Time MBA Candidate, Wharton School of Business, Aug 2021 - May 2023"
+        ],
+        "confidence_score": 0.95,
+        "cost_of_insight": {
+          "tokens_in": 1156,
+          "tokens_out": 164,
+          "model": "gpt-4o",
+          "est_usd": 0.00453
+        },
+        "alternative": "A simple date overlap check would catch the full-time role overlap but not the keyword-stuffing signal.",
+        "fraud_risk": "high",
+        "fraud_flags": [
+          "Full-time role overlap: Senior Backend Engineer and MBA program from Aug 2021 to May 2023."
+        ]
+      },
+      "fit": {
+        "candidate_id": "CAND_007",
+        "recommendation": "Strong fit - advance to technical screen",
+        "evidence": [
+          "Senior Backend Engineer at Praxis Systems, Jun 2021 - Present (4.6 yrs)",
+          "Architected Praxis's distributed order-matching engine handling 50K transactions/second",
+          "Led a 3-person team through a full rewrite from PHP to Go"
+        ],
+        "confidence_score": 0.9,
+        "cost_of_insight": {
+          "tokens_in": 1079,
+          "tokens_out": 185,
+          "model": "gpt-4o",
+          "est_usd": 0.004547
+        },
+        "alternative": "Use a keyword matching tool to quickly identify presence of must-have skills, but this may miss context and specific evidence.",
+        "fit_score": 90,
+        "requirements_met": [
+          "5+ years professional backend engineering experience",
+          "Hands-on distributed systems experience (not just theoretical)",
+          "Strong Python or Go",
+          "Has led at least one significant technical initiative or a team, formally or informally"
+        ],
+        "requirements_missing": []
+      },
+      "traits": {
+        "candidate_id": "CAND_007",
+        "recommendation": "Consider this candidate for roles requiring both technical leadership and stability, as they demonstrate strong leadership and loyalty.",
+        "evidence": [
+          "Led a 3-person team through a full rewrite from PHP to Go at Praxis Systems.",
+          "4.6 years tenure at Praxis Systems, indicating stability and loyalty."
+        ],
+        "confidence_score": 0.9,
+        "cost_of_insight": {
+          "tokens_in": 888,
+          "tokens_out": 176,
+          "model": "gpt-4o",
+          "est_usd": 0.00398
+        },
+        "alternative": "Conduct a brief phone interview to verify leadership experiences and reasons for tenure, which could provide more nuanced insights.",
+        "leadership_score": 0.9,
+        "loyalty_score": 0.9,
+        "caveats": [
+          "Leadership score is inferred from resume text alone, not verified with references.",
+          "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+        ]
+      }
+    }
+  },
+  {
+    "candidate_id": "CAND_008",
+    "name": "Renata Silva",
+    "source_channel": "Referral",
+    "fraud_risk": "low",
+    "fraud_flags": [],
+    "fraud_recommendation": "Advance normally",
+    "fit_score": 95,
+    "requirements_met": [
+      "5+ years professional backend engineering experience",
+      "Hands-on distributed systems experience (not just theoretical)",
+      "Strong Python or Go",
+      "Has led at least one significant technical initiative or a team, formally or informally"
+    ],
+    "requirements_missing": [],
+    "leadership_score": 0.8,
+    "loyalty_score": 0.9,
+    "trait_caveats": [
+      "Leadership score is inferred from resume text alone, not verified with references.",
+      "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+    ],
+    "total_cost_usd": 0.013447,
+    "raw": {
+      "fraud": {
+        "candidate_id": "CAND_008",
+        "recommendation": "Advance normally",
+        "evidence": [
+          "Timeline is consistent: Backend Engineer at Fennwick Logistics (Jan 2020 - Feb 2023) followed by Senior Backend Engineer at Loom & Ledger (Mar 2023 - Present).",
+          "Clear career change explanation: Switched from structural engineering to software engineering in 2020, supported by a bootcamp certificate."
+        ],
+        "confidence_score": 0.95,
+        "cost_of_insight": {
+          "tokens_in": 1190,
+          "tokens_out": 149,
+          "model": "gpt-4o",
+          "est_usd": 0.004465
+        },
+        "alternative": "A regex-only date-overlap check would confirm the timeline consistency but would not verify the career change explanation.",
+        "fraud_risk": "low",
+        "fraud_flags": []
+      },
+      "fit": {
+        "candidate_id": "CAND_008",
+        "recommendation": "Strong fit - advance to technical screen",
+        "evidence": [
+          "5.7 years building distributed inventory and logistics systems in Go and Python",
+          "Led the design of a warehouse-routing service used by 40+ client sites",
+          "Experience with Go and Python",
+          "2.8 yrs at Loom & Ledger + 3.1 yrs at Fennwick Logistics = 5.9 yrs total backend engineering experience"
+        ],
+        "confidence_score": 0.9,
+        "cost_of_insight": {
+          "tokens_in": 1114,
+          "tokens_out": 200,
+          "model": "gpt-4o",
+          "est_usd": 0.004785
+        },
+        "alternative": "A faster option could be a keyword-based scan, but it risks missing nuanced evidence of leadership or distributed systems experience.",
+        "fit_score": 95,
+        "requirements_met": [
+          "5+ years professional backend engineering experience",
+          "Hands-on distributed systems experience (not just theoretical)",
+          "Strong Python or Go",
+          "Has led at least one significant technical initiative or a team, formally or informally"
+        ],
+        "requirements_missing": []
+      },
+      "traits": {
+        "candidate_id": "CAND_008",
+        "recommendation": "Consider this candidate for roles requiring technical leadership and stability, as they show strong leadership in project ownership and consistent tenure.",
+        "evidence": [
+          "Led the design of a warehouse-routing service now used by 40+ client sites.",
+          "Tenure at Loom & Ledger for 2.8 years and Fennwick Logistics for 3.1 years."
+        ],
+        "confidence_score": 0.9,
+        "cost_of_insight": {
+          "tokens_in": 923,
+          "tokens_out": 189,
+          "model": "gpt-4o",
+          "est_usd": 0.004197
+        },
+        "alternative": "Conduct a technical interview to directly assess leadership and loyalty through situational questions, which may provide more nuanced insights.",
+        "leadership_score": 0.8,
+        "loyalty_score": 0.9,
+        "caveats": [
+          "Leadership score is inferred from resume text alone, not verified with references.",
+          "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+        ]
+      }
+    }
+  },
+  {
+    "candidate_id": "CAND_009",
+    "name": "Owen Fitzgerald",
+    "source_channel": "LinkedIn",
+    "fraud_risk": "low",
+    "fraud_flags": [],
+    "fraud_recommendation": "Advance normally",
+    "fit_score": 50,
+    "requirements_met": [
+      "5+ years professional backend engineering experience",
+      "Strong Python"
+    ],
+    "requirements_missing": [
+      "Hands-on distributed systems experience (not just theoretical)",
+      "Has led at least one significant technical initiative or a team, formally or informally"
+    ],
+    "leadership_score": 0.2,
+    "loyalty_score": 1.0,
+    "trait_caveats": [
+      "Leadership score is inferred from resume text alone, not verified with references.",
+      "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+    ],
+    "total_cost_usd": 0.012584,
+    "raw": {
+      "fraud": {
+        "candidate_id": "CAND_009",
+        "recommendation": "Advance normally",
+        "evidence": [
+          "Backend Engineer at Corvus Health, Feb 2020 - Present (5.9 yrs)",
+          "B.S. Computer Science, Purdue University, 2019"
+        ],
+        "confidence_score": 0.95,
+        "cost_of_insight": {
+          "tokens_in": 1141,
+          "tokens_out": 113,
+          "model": "gpt-4o",
+          "est_usd": 0.003982
+        },
+        "alternative": "A regex-only date-overlap check would confirm timeline accuracy but wouldn't assess content quality.",
+        "fraud_risk": "low",
+        "fraud_flags": []
+      },
+      "fit": {
+        "candidate_id": "CAND_009",
+        "recommendation": "Missing leadership and distributed systems requirements - would need to probe these specifically in screening",
+        "evidence": [
+          "Backend Engineer at Corvus Health, Feb 2020 - Present (5.9 yrs). Solid individual contributor building HIPAA-compliant Python services; have contributed to distributed systems designed by senior architects but have not personally led an architecture decision or a team, formal or informal - I execute well-scoped tickets and have a strong reliability track record."
+        ],
+        "confidence_score": 0.8,
+        "cost_of_insight": {
+          "tokens_in": 1064,
+          "tokens_out": 210,
+          "model": "gpt-4o",
+          "est_usd": 0.00476
+        },
+        "alternative": "A faster option is to conduct a brief phone screen focusing on leadership and distributed systems experience, which could quickly clarify these gaps.",
+        "fit_score": 50,
+        "requirements_met": [
+          "5+ years professional backend engineering experience",
+          "Strong Python"
+        ],
+        "requirements_missing": [
+          "Hands-on distributed systems experience (not just theoretical)",
+          "Has led at least one significant technical initiative or a team, formally or informally"
+        ]
+      },
+      "traits": {
+        "candidate_id": "CAND_009",
+        "recommendation": "Consider this candidate for roles that value stability and consistent execution over leadership potential.",
+        "evidence": [
+          "Backend Engineer at Corvus Health, Feb 2020 - Present (5.9 yrs)",
+          "Solid individual contributor building HIPAA-compliant Python services"
+        ],
+        "confidence_score": 0.8,
+        "cost_of_insight": {
+          "tokens_in": 873,
+          "tokens_out": 166,
+          "model": "gpt-4o",
+          "est_usd": 0.003842
+        },
+        "alternative": "Conduct a brief phone interview to assess leadership potential directly, saving time on deeper reference checks.",
+        "leadership_score": 0.2,
+        "loyalty_score": 1.0,
+        "caveats": [
+          "Leadership score is inferred from resume text alone, not verified with references.",
+          "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+        ]
+      }
+    }
+  },
+  {
+    "candidate_id": "CAND_010",
+    "name": "Victor Adeyemi",
+    "source_channel": "QuickApply Staffing Agency",
+    "fraud_risk": "high",
+    "fraud_flags": [
+      "Claimed 12 years of experience but graduated in 2020, making it impossible to have more than 6 years of experience by 2026.",
+      "Title inflation: 'Principal Architect' with only 3 years post-graduation experience is unusually senior."
+    ],
+    "fraud_recommendation": "Flag for manual verification before advancing - explain the discrepancy in screening",
+    "fit_score": 95,
+    "requirements_met": [
+      "5+ years professional backend engineering experience",
+      "Hands-on distributed systems experience (not just theoretical)",
+      "Has led at least one significant technical initiative or a team, formally or informally"
+    ],
+    "requirements_missing": [
+      "Strong Python or Go experience (not explicitly mentioned)",
+      "Kubernetes / container orchestration",
+      "Cloud infrastructure (AWS or GCP)",
+      "Mentoring or onboarding experience"
+    ],
+    "leadership_score": 0.9,
+    "loyalty_score": 0.8,
+    "trait_caveats": [
+      "Leadership score is inferred from resume text alone, not verified with references.",
+      "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+    ],
+    "total_cost_usd": 0.013025,
+    "raw": {
+      "fraud": {
+        "candidate_id": "CAND_010",
+        "recommendation": "Flag for manual verification before advancing - explain the discrepancy in screening",
+        "evidence": [
+          "Principal Architect at Northstar Global, Jan 2023 - Present",
+          "12 years leading enterprise-scale distributed systems architecture",
+          "B.S. Computer Science, Cal Poly, graduated 2020"
+        ],
+        "confidence_score": 0.95,
+        "cost_of_insight": {
+          "tokens_in": 1125,
+          "tokens_out": 178,
+          "model": "gpt-4o",
+          "est_usd": 0.004592
+        },
+        "alternative": "A simple cross-check of graduation date against claimed experience duration would catch this mismatch.",
+        "fraud_risk": "high",
+        "fraud_flags": [
+          "Claimed 12 years of experience but graduated in 2020, making it impossible to have more than 6 years of experience by 2026.",
+          "Title inflation: 'Principal Architect' with only 3 years post-graduation experience is unusually senior."
+        ]
+      },
+      "fit": {
+        "candidate_id": "CAND_010",
+        "recommendation": "Strong fit - advance to technical screen",
+        "evidence": [
+          "12 years leading enterprise-scale distributed systems architecture for Fortune 500 clients",
+          "Principal Architect at Northstar Global, Jan 2023 - Present",
+          "Senior Consultant at Meridian Partners, 2021 - 2023"
+        ],
+        "confidence_score": 0.9,
+        "cost_of_insight": {
+          "tokens_in": 1046,
+          "tokens_out": 204,
+          "model": "gpt-4o",
+          "est_usd": 0.004655
+        },
+        "alternative": "Use a keyword matching tool to quickly identify relevant experience, but this may miss nuanced evidence of leadership or specific technical skills.",
+        "fit_score": 95,
+        "requirements_met": [
+          "5+ years professional backend engineering experience",
+          "Hands-on distributed systems experience (not just theoretical)",
+          "Has led at least one significant technical initiative or a team, formally or informally"
+        ],
+        "requirements_missing": [
+          "Strong Python or Go experience (not explicitly mentioned)",
+          "Kubernetes / container orchestration",
+          "Cloud infrastructure (AWS or GCP)",
+          "Mentoring or onboarding experience"
+        ]
+      },
+      "traits": {
+        "candidate_id": "CAND_010",
+        "recommendation": "Consider this candidate for roles requiring strong leadership in technical architecture and long-term project commitment.",
+        "evidence": [
+          "12 years leading enterprise-scale distributed systems architecture for Fortune 500 clients",
+          "Principal Architect at Northstar Global, Jan 2023 - Present"
+        ],
+        "confidence_score": 0.8,
+        "cost_of_insight": {
+          "tokens_in": 855,
+          "tokens_out": 164,
+          "model": "gpt-4o",
+          "est_usd": 0.003778
+        },
+        "alternative": "Conduct a reference check to verify leadership experiences, which is more reliable but time-consuming.",
+        "leadership_score": 0.9,
+        "loyalty_score": 0.8,
+        "caveats": [
+          "Leadership score is inferred from resume text alone, not verified with references.",
+          "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+        ]
+      }
+    }
+  },
+  {
+    "candidate_id": "CAND_011",
+    "name": "Grace Lindqvist",
+    "source_channel": "Company Careers Page",
+    "fraud_risk": "low",
+    "fraud_flags": [],
+    "fraud_recommendation": "Advance normally",
+    "fit_score": 95,
+    "requirements_met": [
+      "5+ years professional backend engineering experience",
+      "Hands-on distributed systems experience (not just theoretical)",
+      "Has led at least one significant technical initiative or a team, formally or informally"
+    ],
+    "requirements_missing": [
+      "Strong Python or Go"
+    ],
+    "leadership_score": 0.9,
+    "loyalty_score": 1.0,
+    "trait_caveats": [
+      "Leadership score is inferred from resume text alone, not verified with references.",
+      "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+    ],
+    "total_cost_usd": 0.014132,
+    "raw": {
+      "fraud": {
+        "candidate_id": "CAND_011",
+        "recommendation": "Advance normally",
+        "evidence": [
+          "B.S. Computer Science, University of Washington, 2019",
+          "Senior Backend Engineer at Bastion Cloud, May 2022 - Apr 2026 (3.9 yrs)",
+          "Led the design and rollout of Bastion's multi-region distributed caching layer, reducing read latency by 55% across 3 regions"
+        ],
+        "confidence_score": 0.95,
+        "cost_of_insight": {
+          "tokens_in": 1192,
+          "tokens_out": 146,
+          "model": "gpt-4o",
+          "est_usd": 0.00444
+        },
+        "alternative": "A regex-only date-overlap check would confirm timeline consistency but miss the detailed project metrics.",
+        "fraud_risk": "low",
+        "fraud_flags": []
+      },
+      "fit": {
+        "candidate_id": "CAND_011",
+        "recommendation": "Strong fit - advance to technical screen",
+        "evidence": [
+          "3.9 yrs at Bastion Cloud + 2.8 yrs at Hollowell Systems = 6.7 yrs total, meets the 5+ year requirement",
+          "Led the design and rollout of Bastion's multi-region distributed caching layer, reducing read latency by 55% across 3 regions",
+          "Directly managed 2 engineers for the final year at Bastion Cloud",
+          "Strong Python or Go not explicitly mentioned, but likely given backend roles"
+        ],
+        "confidence_score": 0.9,
+        "cost_of_insight": {
+          "tokens_in": 1114,
+          "tokens_out": 228,
+          "model": "gpt-4o",
+          "est_usd": 0.005065
+        },
+        "alternative": "Use a keyword search for 'distributed systems' and 'Python or Go' to quickly filter resumes, but this may miss nuanced experience descriptions.",
+        "fit_score": 95,
+        "requirements_met": [
+          "5+ years professional backend engineering experience",
+          "Hands-on distributed systems experience (not just theoretical)",
+          "Has led at least one significant technical initiative or a team, formally or informally"
+        ],
+        "requirements_missing": [
+          "Strong Python or Go"
+        ]
+      },
+      "traits": {
+        "candidate_id": "CAND_011",
+        "recommendation": "Consider this candidate for roles requiring technical leadership and stability, as they have demonstrated both in past roles.",
+        "evidence": [
+          "Led the design and rollout of Bastion's multi-region distributed caching layer, reducing read latency by 55% across 3 regions; directly managed 2 engineers for the final year.",
+          "Senior Backend Engineer at Bastion Cloud, May 2022 - Apr 2026 (3.9 yrs)",
+          "Backend Engineer at Hollowell Systems, Jul 2019 - Apr 2022 (2.8 yrs)"
+        ],
+        "confidence_score": 0.9,
+        "cost_of_insight": {
+          "tokens_in": 923,
+          "tokens_out": 232,
+          "model": "gpt-4o",
+          "est_usd": 0.004627
+        },
+        "alternative": "Conduct a phone interview to quickly assess leadership and loyalty traits through behavioral questions, though this may miss nuanced insights from past roles.",
+        "leadership_score": 0.9,
+        "loyalty_score": 1.0,
+        "caveats": [
+          "Leadership score is inferred from resume text alone, not verified with references.",
+          "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+        ]
+      }
+    }
+  },
+  {
+    "candidate_id": "CAND_012",
+    "name": "Samir Kapoor",
+    "source_channel": "QuickApply Staffing Agency",
+    "fraud_risk": "low",
+    "fraud_flags": [],
+    "fraud_recommendation": "Advance normally",
+    "fit_score": 40,
+    "requirements_met": [
+      "Strong Python"
+    ],
+    "requirements_missing": [
+      "5+ years professional backend engineering experience",
+      "Hands-on distributed systems experience (not just theoretical)",
+      "Has led at least one significant technical initiative or a team, formally or informally."
+    ],
+    "leadership_score": 0.2,
+    "loyalty_score": 0.8,
+    "trait_caveats": [
+      "Leadership score is inferred from resume text alone, not verified with references.",
+      "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+    ],
+    "total_cost_usd": 0.012634,
+    "raw": {
+      "fraud": {
+        "candidate_id": "CAND_012",
+        "recommendation": "Advance normally",
+        "evidence": [
+          "Backend Engineer role from 2022 - Present aligns with 4 years of experience since A.S. degree in 2021.",
+          "Specific technologies and contract durations are mentioned, indicating genuine experience."
+        ],
+        "confidence_score": 0.95,
+        "cost_of_insight": {
+          "tokens_in": 1137,
+          "tokens_out": 119,
+          "model": "gpt-4o",
+          "est_usd": 0.004032
+        },
+        "alternative": "A regex-only date-overlap check would confirm timeline consistency but would not assess content specificity.",
+        "fraud_risk": "low",
+        "fraud_flags": []
+      },
+      "fit": {
+        "candidate_id": "CAND_012",
+        "recommendation": "Missing distributed systems and leadership requirements - would need to probe these specifically in screening",
+        "evidence": [
+          "Backend Engineer, various contract roles via staffing placements, 2022 - Present. Have worked short-term contracts (3-9 months each) at four different companies building REST APIs in Python.",
+          "Limited exposure to distributed systems design; most contracts involved feature work on existing services rather than architecture."
+        ],
+        "confidence_score": 0.8,
+        "cost_of_insight": {
+          "tokens_in": 1058,
+          "tokens_out": 201,
+          "model": "gpt-4o",
+          "est_usd": 0.004655
+        },
+        "alternative": "Use a keyword-based resume parser to quickly filter for 'distributed systems' and 'leadership' mentions, but this may miss nuanced evidence.",
+        "fit_score": 40,
+        "requirements_met": [
+          "Strong Python"
+        ],
+        "requirements_missing": [
+          "5+ years professional backend engineering experience",
+          "Hands-on distributed systems experience (not just theoretical)",
+          "Has led at least one significant technical initiative or a team, formally or informally."
+        ]
+      },
+      "traits": {
+        "candidate_id": "CAND_012",
+        "recommendation": "Consider this candidate for roles that value adaptability and quick integration into teams, but verify leadership potential through interviews.",
+        "evidence": [
+          "Various contract roles via staffing placements, 2022 - Present.",
+          "Worked short-term contracts (3-9 months each) at four different companies."
+        ],
+        "confidence_score": 0.6,
+        "cost_of_insight": {
+          "tokens_in": 867,
+          "tokens_out": 178,
+          "model": "gpt-4o",
+          "est_usd": 0.003947
+        },
+        "alternative": "Conduct a brief phone interview to assess leadership potential directly, which is faster than a full interview process but may miss nuanced insights.",
+        "leadership_score": 0.2,
+        "loyalty_score": 0.8,
+        "caveats": [
+          "Leadership score is inferred from resume text alone, not verified with references.",
+          "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+        ]
+      }
+    }
+  },
+  {
+    "candidate_id": "CAND_013",
+    "name": "Ethan Marlow",
+    "source_channel": "QuickApply Staffing Agency",
+    "fraud_risk": "high",
+    "fraud_flags": [
+      "Keyword-stuffing: repetitive, generic phrasing across all roles",
+      "Lack of concrete metrics or specific outcomes in all job descriptions"
+    ],
+    "fraud_recommendation": "Flag for manual verification before advancing - explain the keyword-stuffing and lack of concrete details in screening",
+    "fit_score": 95,
+    "requirements_met": [
+      "5+ years professional backend engineering experience",
+      "Hands-on distributed systems experience (not just theoretical)",
+      "Strong Python or Go",
+      "Has led at least one significant technical initiative or a team, formally or informally",
+      "Kubernetes / container orchestration",
+      "Cloud infrastructure (AWS or GCP)"
+    ],
+    "requirements_missing": [],
+    "leadership_score": 0.7,
+    "loyalty_score": 0.9,
+    "trait_caveats": [
+      "Leadership score is inferred from resume text alone, not verified with references.",
+      "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+    ],
+    "total_cost_usd": 0.013996,
+    "raw": {
+      "fraud": {
+        "candidate_id": "CAND_013",
+        "recommendation": "Flag for manual verification before advancing - explain the keyword-stuffing and lack of concrete details in screening",
+        "evidence": [
+          "All roles use nearly identical, generic phrasing: 'Results-driven', 'proven expertise', 'strong background', 'skilled in'.",
+          "No concrete metrics, named systems, or specific outcomes across all roles."
+        ],
+        "confidence_score": 0.95,
+        "cost_of_insight": {
+          "tokens_in": 1189,
+          "tokens_out": 173,
+          "model": "gpt-4o",
+          "est_usd": 0.004703
+        },
+        "alternative": "A keyword density analysis could quickly flag the repetitive, generic phrasing but would miss the lack of concrete outcomes.",
+        "fraud_risk": "high",
+        "fraud_flags": [
+          "Keyword-stuffing: repetitive, generic phrasing across all roles",
+          "Lack of concrete metrics or specific outcomes in all job descriptions"
+        ]
+      },
+      "fit": {
+        "candidate_id": "CAND_013",
+        "recommendation": "Strong fit - advance to technical screen",
+        "evidence": [
+          "Senior Backend Engineer, Jan 2022 - Jan 2024: proven expertise in distributed systems, Python, Go, Kubernetes, AWS, GCP, microservices, leadership.",
+          "Backend Engineer, Jan 2020 - Jan 2022: strong distributed systems, Python, Go, Kubernetes, AWS, GCP, and microservices background.",
+          "Software Engineer, Jan 2018 - Jan 2020: skilled in distributed systems, Python, Go, and cloud infrastructure."
+        ],
+        "confidence_score": 0.9,
+        "cost_of_insight": {
+          "tokens_in": 1110,
+          "tokens_out": 250,
+          "model": "gpt-4o",
+          "est_usd": 0.005275
+        },
+        "alternative": "Use a keyword-based filter to quickly identify resumes mentioning 'distributed systems' and 'Python or Go', but this may miss context on actual experience.",
+        "fit_score": 95,
+        "requirements_met": [
+          "5+ years professional backend engineering experience",
+          "Hands-on distributed systems experience (not just theoretical)",
+          "Strong Python or Go",
+          "Has led at least one significant technical initiative or a team, formally or informally",
+          "Kubernetes / container orchestration",
+          "Cloud infrastructure (AWS or GCP)"
+        ],
+        "requirements_missing": []
+      },
+      "traits": {
+        "candidate_id": "CAND_013",
+        "recommendation": "Consider this candidate for roles requiring technical leadership and stability, as they show consistent growth and tenure.",
+        "evidence": [
+          "Senior Backend Engineer role mentions leadership and cross-functional collaboration.",
+          "Consistent tenure at each role, with no unexplained gaps or frequent changes."
+        ],
+        "confidence_score": 0.8,
+        "cost_of_insight": {
+          "tokens_in": 919,
+          "tokens_out": 172,
+          "model": "gpt-4o",
+          "est_usd": 0.004018
+        },
+        "alternative": "Conduct a reference check to verify leadership skills, which is faster but may not capture all aspects of their leadership style.",
+        "leadership_score": 0.7,
+        "loyalty_score": 0.9,
+        "caveats": [
+          "Leadership score is inferred from resume text alone, not verified with references.",
+          "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+        ]
+      }
+    }
+  },
+  {
+    "candidate_id": "CAND_014",
+    "name": "Naomi Turner",
+    "source_channel": "Referral",
+    "fraud_risk": "low",
+    "fraud_flags": [],
+    "fraud_recommendation": "Advance normally",
+    "fit_score": 95,
+    "requirements_met": [
+      "5+ years professional backend engineering experience",
+      "Hands-on distributed systems experience (not just theoretical)",
+      "Strong Python or Go",
+      "Has led at least one significant technical initiative or a team, formally or informally",
+      "Kubernetes / container orchestration"
+    ],
+    "requirements_missing": [
+      "Cloud infrastructure (AWS or GCP)",
+      "Mentoring or onboarding experience"
+    ],
+    "leadership_score": 0.9,
+    "loyalty_score": 1.0,
+    "trait_caveats": [
+      "Leadership score is inferred from resume text alone, not verified with references.",
+      "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+    ],
+    "total_cost_usd": 0.013577,
+    "raw": {
+      "fraud": {
+        "candidate_id": "CAND_014",
+        "recommendation": "Advance normally",
+        "evidence": [
+          "Senior Backend Engineer at Halberd Analytics, Apr 2021 - Present (5.3 yrs)",
+          "Backend Engineer at Woodmere Tech, Jun 2018 - Mar 2021 (2.8 yrs)",
+          "B.S. Computer Science, University of Michigan, 2018"
+        ],
+        "confidence_score": 0.95,
+        "cost_of_insight": {
+          "tokens_in": 1170,
+          "tokens_out": 140,
+          "model": "gpt-4o",
+          "est_usd": 0.004325
+        },
+        "alternative": "A regex-only date-overlap check would confirm timeline consistency but miss detailed role content verification.",
+        "fraud_risk": "low",
+        "fraud_flags": []
+      },
+      "fit": {
+        "candidate_id": "CAND_014",
+        "recommendation": "Strong fit - advance to technical screen",
+        "evidence": [
+          "5.3 yrs + 2.8 yrs = 8.1 yrs total, meets the 5+ year requirement",
+          "Designed and led the build-out of Halberd's distributed event-processing platform (Go, Kafka, Kubernetes)",
+          "Currently the technical lead for a 4-person team",
+          "Experience with Kubernetes",
+          "Experience with cloud infrastructure (AWS or GCP) not explicitly mentioned",
+          "No explicit mention of mentoring or onboarding experience"
+        ],
+        "confidence_score": 0.9,
+        "cost_of_insight": {
+          "tokens_in": 1094,
+          "tokens_out": 244,
+          "model": "gpt-4o",
+          "est_usd": 0.005175
+        },
+        "alternative": "Use a keyword-based resume parser to quickly identify potential matches, but this may miss nuanced evidence of leadership or distributed systems experience.",
+        "fit_score": 95,
+        "requirements_met": [
+          "5+ years professional backend engineering experience",
+          "Hands-on distributed systems experience (not just theoretical)",
+          "Strong Python or Go",
+          "Has led at least one significant technical initiative or a team, formally or informally",
+          "Kubernetes / container orchestration"
+        ],
+        "requirements_missing": [
+          "Cloud infrastructure (AWS or GCP)",
+          "Mentoring or onboarding experience"
+        ]
+      },
+      "traits": {
+        "candidate_id": "CAND_014",
+        "recommendation": "Candidate shows strong leadership and loyalty, suitable for roles requiring technical leadership and team stability.",
+        "evidence": [
+          "Currently the technical lead for a 4-person team and run the team's architecture review process.",
+          "Tenure at Halberd Analytics for 5.3 years and Woodmere Tech for 2.8 years."
+        ],
+        "confidence_score": 0.9,
+        "cost_of_insight": {
+          "tokens_in": 903,
+          "tokens_out": 182,
+          "model": "gpt-4o",
+          "est_usd": 0.004077
+        },
+        "alternative": "Conduct a reference check to verify leadership and loyalty traits, though it may take more time and resources.",
+        "leadership_score": 0.9,
+        "loyalty_score": 1.0,
+        "caveats": [
+          "Leadership score is inferred from resume text alone, not verified with references.",
+          "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for leaving."
+        ]
+      }
+    }
+  },
+  {
+    "candidate_id": "CAND_015",
+    "name": "Chris Palladino",
+    "source_channel": "LinkedIn",
+    "fraud_risk": "low",
+    "fraud_flags": [],
+    "fraud_recommendation": "Advance normally",
+    "fit_score": 30,
+    "requirements_met": [
+      "5+ years professional backend engineering experience (6.5 years in QA Automation)",
+      "Strong Python"
+    ],
+    "requirements_missing": [
+      "Hands-on distributed systems experience (not just theoretical)",
+      "Has led at least one significant technical initiative or a team, formally or informally"
+    ],
+    "leadership_score": 0.7,
+    "loyalty_score": 1.0,
+    "trait_caveats": [
+      "Leadership score is inferred from resume text alone, not verified with references.",
+      "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for staying."
+    ],
+    "total_cost_usd": 0.01252,
+    "raw": {
+      "fraud": {
+        "candidate_id": "CAND_015",
+        "recommendation": "Advance normally",
+        "evidence": [
+          "QA Automation Engineer at Delft Software, Feb 2019 - Present (6.5 yrs)",
+          "B.S. Computer Science, Iowa State University, 2018"
+        ],
+        "confidence_score": 0.95,
+        "cost_of_insight": {
+          "tokens_in": 1131,
+          "tokens_out": 115,
+          "model": "gpt-4o",
+          "est_usd": 0.003978
+        },
+        "alternative": "A regex-only date-overlap check would confirm timeline consistency but would not assess content quality.",
+        "fraud_risk": "low",
+        "fraud_flags": []
+      },
+      "fit": {
+        "candidate_id": "CAND_015",
+        "recommendation": "Missing distributed systems and leadership requirements - not suitable for this role",
+        "evidence": [
+          "QA Automation Engineer at Delft Software, Feb 2019 - Present (6.5 yrs)",
+          "Built and maintain the company's end-to-end test automation suite in Python (Selenium, pytest)"
+        ],
+        "confidence_score": 0.9,
+        "cost_of_insight": {
+          "tokens_in": 1054,
+          "tokens_out": 201,
+          "model": "gpt-4o",
+          "est_usd": 0.004645
+        },
+        "alternative": "A faster option would be to filter candidates based on keywords like 'distributed systems' and 'leadership' in their job descriptions, but this risks missing candidates with relevant experience not captured by keywords.",
+        "fit_score": 30,
+        "requirements_met": [
+          "5+ years professional backend engineering experience (6.5 years in QA Automation)",
+          "Strong Python"
+        ],
+        "requirements_missing": [
+          "Hands-on distributed systems experience (not just theoretical)",
+          "Has led at least one significant technical initiative or a team, formally or informally"
+        ]
+      },
+      "traits": {
+        "candidate_id": "CAND_015",
+        "recommendation": "Consider this candidate for roles requiring stable tenure and technical leadership in QA automation.",
+        "evidence": [
+          "Tenure of 6.5 years at Delft Software indicates strong loyalty.",
+          "Built and maintained the company's end-to-end test automation suite, showing leadership in technical ownership."
+        ],
+        "confidence_score": 0.9,
+        "cost_of_insight": {
+          "tokens_in": 863,
+          "tokens_out": 174,
+          "model": "gpt-4o",
+          "est_usd": 0.003897
+        },
+        "alternative": "Conduct a brief phone interview to verify leadership experiences, which is faster but may miss nuanced insights from a resume review.",
+        "leadership_score": 0.7,
+        "loyalty_score": 1.0,
+        "caveats": [
+          "Leadership score is inferred from resume text alone, not verified with references.",
+          "Loyalty score reflects tenure pattern only, not stated performance or fit reasons for staying."
+        ]
+      }
+    }
+  }
+]

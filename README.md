@@ -36,6 +36,8 @@ python -m src.run_pipeline
 streamlit run src/dashboard.py
 ```
 
+No API key handy? `sample_output/pipeline_results.json` is a real, checked-in run you can inspect directly — see `sample_output/README.md`.
+
 `run_pipeline.py` saves full results to `output/pipeline_results.json`. The dashboard reads from that file, so run the pipeline at least once before launching it.
 
 ## Project structure
@@ -55,6 +57,7 @@ hiring-intelligence/
 │   │   └── behavioral_traits.py
 │   ├── run_pipeline.py      # orchestrator: runs all 3 agents, ranks, saves
 │   └── dashboard.py         # Streamlit UI
+├── sample_output/           # a real, checked-in run — inspect without an API key
 └── output/                  # generated results (gitignored)
 ```
 
