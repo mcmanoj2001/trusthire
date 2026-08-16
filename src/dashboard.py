@@ -192,32 +192,16 @@ def requires_comment(r: dict, new_category: str) -> bool:
 # Small components
 # ---------------------------------------------------------------------------
 
-RAG_GRADIENT = f'linear-gradient(90deg, {STATUS["high"]["color"]} 0%, {STATUS["medium"]["color"]} 50%, {STATUS["low"]["color"]} 100%)'
-
-
-def _hex_to_rgb(h: str) -> tuple[int, int, int]:
-    h = h.lstrip("#")
-    return int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
-
-
-def _lerp_hex(c1: str, c2: str, t: float) -> str:
-    r1, g1, b1 = _hex_to_rgb(c1)
-    r2, g2, b2 = _hex_to_rgb(c2)
-    r = round(r1 + (r2 - r1) * t)
-    g = round(g1 + (g2 - g1) * t)
-    b = round(b1 + (b2 - b1) * t)
-    return f"#{r:02x}{g:02x}{b:02x}"
-
-
 def rag_color(value: float, scale_max: float = 1.0) -> str:
-    """Maps a 0..scale_max metric onto a continuous red->amber->green gradient
-    (the same three anchor colors as the fixed status palette) so fit score,
-    leadership, and loyalty read as a smooth spectrum instead of jumping
-    between three flat buckets."""
-    pct = max(0.0, min(1.0, (value / scale_max) if scale_max else 0))
-    if pct <= 0.5:
-        return _lerp_hex(STATUS["high"]["color"], STATUS["medium"]["color"], pct / 0.5)
-    return _lerp_hex(STATUS["medium"]["color"], STATUS["low"]["color"], (pct - 0.5) / 0.5)
+    """Maps a 0..scale_max metric onto the fixed status palette so fit score,
+    leadership, and loyalty all read red/amber/green at a glance instead of
+    requiring the viewer to parse a raw number."""
+    pct = (value / scale_max) if scale_max else 0
+    if pct >= 0.7:
+        return STATUS["low"]["color"]
+    if pct >= 0.4:
+        return STATUS["medium"]["color"]
+    return STATUS["high"]["color"]
 
 
 def gradient_heading(text: str, size: str = "2.25rem", weight: int = 800) -> str:
@@ -226,13 +210,13 @@ def gradient_heading(text: str, size: str = "2.25rem", weight: int = 800) -> str
 
 def status_badge(risk: str) -> str:
     s = STATUS.get(risk, {"color": INK_MUTED, "icon": "?", "label": risk})
-    return (f'<span class="status-badge" style="background:linear-gradient(135deg,{s["color"]}3d,{s["color"]}14);'
+    return (f'<span class="status-badge" style="background:{s["color"]}22;'
             f'color:{s["color"]};border:1px solid {s["color"]}66;">{s["icon"]} {s["label"]}</span>')
 
 
 def category_badge(category: str) -> str:
     c = CATEGORIES.get(category, {"label": category, "color": INK_MUTED})
-    return (f'<span class="status-badge" style="background:linear-gradient(135deg,{c["color"]}3d,{c["color"]}14);'
+    return (f'<span class="status-badge" style="background:{c["color"]}22;'
             f'color:{c["color"]};border:1px solid {c["color"]}66;">{c["label"]}</span>')
 
 
@@ -241,34 +225,20 @@ def round_badge(round_index: int) -> str:
 
 
 def fit_meter(score: int) -> str:
-    """The fill reveals a fixed red->amber->green gradient up to the score's
-    position, rather than a flat single color - so the bar itself communicates
-    where on the RAG spectrum the candidate sits, not just its endpoint color."""
     pct = max(0, min(100, score))
-    point_color = rag_color(pct, 100)
+    fill = rag_color(pct, 100)
     return f'''<div style="display:flex;align-items:center;gap:10px;">
-      <div style="position:relative;flex:1;height:8px;border-radius:4px;background:{TRACK_NEUTRAL};overflow:hidden;">
-        <div style="position:absolute;inset:0;border-radius:4px;background:{RAG_GRADIENT};
-                    clip-path:inset(0 {100 - pct}% 0 0);"></div>
+      <div style="flex:1;height:8px;border-radius:4px;background:{TRACK_NEUTRAL};overflow:hidden;">
+        <div style="width:{pct}%;height:100%;border-radius:4px;background:{fill};"></div>
       </div>
-      <span style="font-weight:600;color:{point_color};min-width:32px;text-align:right;">{pct}</span>
+      <span style="font-weight:600;color:{fill};min-width:32px;text-align:right;">{pct}</span>
     </div>'''
 
 
-def stat_tile(label: str, value: str, value_color: str | None = None, pct: float | None = None) -> str:
-    """pct (0-100), when given, draws a slim RAG-gradient meter under the
-    value - the same reveal-to-position treatment as fit_meter - so a tile
-    isn't just a colored number but a small gauge in its own right."""
+def stat_tile(label: str, value: str, value_color: str | None = None) -> str:
     color_style = f' style="color:{value_color};"' if value_color else ""
-    bar_html = ""
-    if pct is not None:
-        p = max(0, min(100, pct))
-        bar_html = (f'<div style="position:relative;height:3px;border-radius:2px;'
-                    f'background:{TRACK_NEUTRAL};overflow:hidden;margin-top:8px;">'
-                    f'<div style="position:absolute;inset:0;border-radius:2px;background:{RAG_GRADIENT};'
-                    f'clip-path:inset(0 {100 - p}% 0 0);"></div></div>')
     return (f'<div class="stat-tile"><div class="label">{label}</div>'
-            f'<div class="value"{color_style}>{value}</div>{bar_html}</div>')
+            f'<div class="value"{color_style}>{value}</div></div>')
 
 
 def cost_strip(total: float, avg: float | None = None) -> str:
@@ -381,8 +351,7 @@ def view_requirements():
                 st.markdown(stat_tile("Shortlist", str(shortlisted_n)), unsafe_allow_html=True)
             with cols[3]:
                 avg_color = rag_color(avg_fit, 100) if shortlisted_scores else None
-                avg_pct = avg_fit if shortlisted_scores else None
-                st.markdown(stat_tile("Avg fit", f"{avg_fit}%", avg_color, avg_pct), unsafe_allow_html=True)
+                st.markdown(stat_tile("Avg fit", f"{avg_fit}%", avg_color), unsafe_allow_html=True)
             with cols[4]:
                 st.markdown(stat_tile("Flagged", str(flagged_n)), unsafe_allow_html=True)
             st.write("")
@@ -556,16 +525,14 @@ def view_profile():
 
     with col_b:
         fit_conf = r["raw"]["fit"]["confidence_score"]
-        st.markdown(stat_tile("Fit confidence", f'{fit_conf:.0%}',
-                               rag_color(fit_conf, 1.0), fit_conf * 100), unsafe_allow_html=True)
+        st.markdown(stat_tile("Fit confidence", f'{fit_conf:.0%}', rag_color(fit_conf, 1.0)),
+                    unsafe_allow_html=True)
         st.write("")
         st.markdown(stat_tile("Leadership", f'{r["leadership_score"]:.2f}',
-                               rag_color(r["leadership_score"], 1.0), r["leadership_score"] * 100),
-                    unsafe_allow_html=True)
+                               rag_color(r["leadership_score"], 1.0)), unsafe_allow_html=True)
         st.write("")
         st.markdown(stat_tile("Loyalty", f'{r["loyalty_score"]:.2f}',
-                               rag_color(r["loyalty_score"], 1.0), r["loyalty_score"] * 100),
-                    unsafe_allow_html=True)
+                               rag_color(r["loyalty_score"], 1.0)), unsafe_allow_html=True)
         st.write("")
         st.markdown(cost_strip(r["total_cost_usd"]), unsafe_allow_html=True)
 
