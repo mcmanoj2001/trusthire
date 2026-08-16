@@ -43,13 +43,16 @@ ROUNDS = ["AI Screening", "Technical Screening"]
 
 CATEGORIES = {
     "shortlisted": {"label": "Shortlisted", "color": "#3987e5"},
+    # Both negative categories default to red - a candidate that isn't actively
+    # progressing should read as "stop" at a glance, not blend into neutral gray.
     "flagged_for_risk": {"label": "Flagged for Risk", "color": "#d03b3b"},
-    "not_moving_forward": {"label": "Not Moving Forward", "color": "#898781"},
+    "not_moving_forward": {"label": "Not Moving Forward", "color": "#d03b3b"},
 }
 CATEGORY_ORDER = ["shortlisted", "flagged_for_risk", "not_moving_forward"]
 
 ACCENT = "#3987e5"       # sequential blue - fit score
 ACCENT_TRACK = "#1c3a5e"  # darker step of the same ramp, recedes on dark surface
+TRACK_NEUTRAL = "#333331"  # meter track when the fill is RAG-colored, not always blue
 INK = "#ffffff"
 INK_SECONDARY = "#c3c2b7"
 INK_MUTED = "#898781"
@@ -163,9 +166,37 @@ def record_action(state: dict, candidate_id: str, fraud_risk: str, *,
     save_pipeline_state(state)
 
 
+def requires_comment(r: dict, new_category: str) -> bool:
+    """A comment is mandatory for a category move UNLESS the system itself
+    already supplied a flagged reason for that destination - e.g. moving a
+    high-fraud-risk candidate to Flagged for Risk just confirms the agent's
+    own finding, so making a human retype it would be pure friction."""
+    if new_category == "flagged_for_risk":
+        return r["fraud_risk"] == "low"
+    if new_category == "not_moving_forward":
+        has_system_reason = r["fraud_risk"] == "high" or bool(r["requirements_missing"])
+        return not has_system_reason
+    if new_category == "shortlisted":
+        system_favorable = r["fraud_risk"] == "low" and not r["requirements_missing"]
+        return not system_favorable
+    return True
+
+
 # ---------------------------------------------------------------------------
 # Small components
 # ---------------------------------------------------------------------------
+
+def rag_color(value: float, scale_max: float = 1.0) -> str:
+    """Maps a 0..scale_max metric onto the fixed status palette so fit score,
+    leadership, and loyalty all read red/amber/green at a glance instead of
+    requiring the viewer to parse a raw number."""
+    pct = (value / scale_max) if scale_max else 0
+    if pct >= 0.7:
+        return STATUS["low"]["color"]
+    if pct >= 0.4:
+        return STATUS["medium"]["color"]
+    return STATUS["high"]["color"]
+
 
 def status_badge(risk: str) -> str:
     s = STATUS.get(risk, {"color": INK_MUTED, "icon": "?", "label": risk})
@@ -185,16 +216,19 @@ def round_badge(round_index: int) -> str:
 
 def fit_meter(score: int) -> str:
     pct = max(0, min(100, score))
+    fill = rag_color(pct, 100)
     return f'''<div style="display:flex;align-items:center;gap:10px;">
-      <div style="flex:1;height:8px;border-radius:4px;background:{ACCENT_TRACK};overflow:hidden;">
-        <div style="width:{pct}%;height:100%;border-radius:4px;background:{ACCENT};"></div>
+      <div style="flex:1;height:8px;border-radius:4px;background:{TRACK_NEUTRAL};overflow:hidden;">
+        <div style="width:{pct}%;height:100%;border-radius:4px;background:{fill};"></div>
       </div>
-      <span style="font-weight:600;color:{INK};min-width:32px;text-align:right;">{pct}</span>
+      <span style="font-weight:600;color:{fill};min-width:32px;text-align:right;">{pct}</span>
     </div>'''
 
 
-def stat_tile(label: str, value: str) -> str:
-    return f'<div class="stat-tile"><div class="label">{label}</div><div class="value">{value}</div></div>'
+def stat_tile(label: str, value: str, value_color: str | None = None) -> str:
+    color_style = f' style="color:{value_color};"' if value_color else ""
+    return (f'<div class="stat-tile"><div class="label">{label}</div>'
+            f'<div class="value"{color_style}>{value}</div></div>')
 
 
 def cost_strip(total: float, avg: float | None = None) -> str:
@@ -212,17 +246,47 @@ def cost_strip(total: float, avg: float | None = None) -> str:
 
 def move_control(state: dict, r: dict, key_prefix: str):
     """Compact category-move dropdown usable from any list row. Applies
-    immediately on change - this is what makes candidates movable between
-    Shortlisted / Flagged for Risk / Not Moving Forward from any list."""
+    immediately on change UNLESS the destination needs a comment the system
+    hasn't already supplied a reason for - then it holds for an inline
+    comment + confirm instead of silently moving the candidate."""
     cat_state = r["_cat_state"]
+    candidate_id = r["candidate_id"]
+    widget_key = f"{key_prefix}_{candidate_id}"
+    pending_key = f"pending_move_{widget_key}"
+
+    pending = st.session_state.get(pending_key)
+    if pending:
+        st.caption(f"Move to **{CATEGORIES[pending]['label']}** — comment required:")
+        reason = st.text_input("Reason", key=f"{pending_key}_comment", label_visibility="collapsed",
+                                placeholder="Why is this candidate moving?")
+        c1, c2 = st.columns(2)
+        with c1:
+            if st.button("Confirm", key=f"{pending_key}_confirm"):
+                if reason.strip():
+                    record_action(state, candidate_id, r["fraud_risk"], category=pending, comment=reason)
+                    del st.session_state[pending_key]
+                    st.rerun()
+                else:
+                    st.error("A comment is required for this move.")
+        with c2:
+            if st.button("Cancel", key=f"{pending_key}_cancel"):
+                st.session_state[widget_key] = CATEGORIES[cat_state["category"]]["label"]
+                del st.session_state[pending_key]
+                st.rerun()
+        return
+
     labels = [CATEGORIES[c]["label"] for c in CATEGORY_ORDER]
     cur_idx = CATEGORY_ORDER.index(cat_state["category"])
     choice = st.selectbox("Move to", labels, index=cur_idx,
-                           key=f"{key_prefix}_{r['candidate_id']}", label_visibility="collapsed")
+                           key=widget_key, label_visibility="collapsed")
     new_cat = CATEGORY_ORDER[labels.index(choice)]
     if new_cat != cat_state["category"]:
-        record_action(state, r["candidate_id"], r["fraud_risk"], category=new_cat)
-        st.rerun()
+        if requires_comment(r, new_cat):
+            st.session_state[pending_key] = new_cat
+            st.rerun()
+        else:
+            record_action(state, candidate_id, r["fraud_risk"], category=new_cat)
+            st.rerun()
 
 
 # ---------------------------------------------------------------------------
@@ -276,7 +340,8 @@ def view_requirements():
             with cols[2]:
                 st.markdown(stat_tile("Shortlist", str(shortlisted_n)), unsafe_allow_html=True)
             with cols[3]:
-                st.markdown(stat_tile("Avg fit", f"{avg_fit}%"), unsafe_allow_html=True)
+                avg_color = rag_color(avg_fit, 100) if shortlisted_scores else None
+                st.markdown(stat_tile("Avg fit", f"{avg_fit}%", avg_color), unsafe_allow_html=True)
             with cols[4]:
                 st.markdown(stat_tile("Flagged", str(flagged_n)), unsafe_allow_html=True)
             st.write("")
@@ -300,10 +365,12 @@ def candidate_row(r: dict, state: dict, key_prefix: str, rank: int | None = None
             st.markdown(fit_meter(r["fit_score"]), unsafe_allow_html=True)
             st.caption("fit score")
         with cols[2]:
-            st.markdown(f"**{r['leadership_score']:.2f}**")
+            st.markdown(f'<span style="font-weight:600;color:{rag_color(r["leadership_score"], 1.0)};">'
+                        f'{r["leadership_score"]:.2f}</span>', unsafe_allow_html=True)
             st.caption("leadership")
         with cols[3]:
-            st.markdown(f"**{r['loyalty_score']:.2f}**")
+            st.markdown(f'<span style="font-weight:600;color:{rag_color(r["loyalty_score"], 1.0)};">'
+                        f'{r["loyalty_score"]:.2f}</span>', unsafe_allow_html=True)
             st.caption("loyalty")
         with cols[4]:
             if r["fraud_risk"] == "medium" and cat_state["category"] == "shortlisted":
@@ -335,8 +402,10 @@ def view_candidates():
 
     shortlisted = sorted([r for r in job_results if r["_cat_state"]["category"] == "shortlisted"],
                           key=lambda r: r["fit_score"], reverse=True)
-    flagged = [r for r in job_results if r["_cat_state"]["category"] == "flagged_for_risk"]
-    not_moving = [r for r in job_results if r["_cat_state"]["category"] == "not_moving_forward"]
+    flagged = sorted([r for r in job_results if r["_cat_state"]["category"] == "flagged_for_risk"],
+                      key=lambda r: r["fit_score"], reverse=True)
+    not_moving = sorted([r for r in job_results if r["_cat_state"]["category"] == "not_moving_forward"],
+                         key=lambda r: r["fit_score"], reverse=True)
 
     if st.button("← All Requirements"):
         go("requirements")
@@ -445,12 +514,15 @@ def view_profile():
                        f'Alternative: {r["raw"]["fraud"]["alternative"]}')
 
     with col_b:
-        st.markdown(stat_tile("Fit confidence", f'{r["raw"]["fit"]["confidence_score"]:.0%}'),
+        fit_conf = r["raw"]["fit"]["confidence_score"]
+        st.markdown(stat_tile("Fit confidence", f'{fit_conf:.0%}', rag_color(fit_conf, 1.0)),
                     unsafe_allow_html=True)
         st.write("")
-        st.markdown(stat_tile("Leadership", f'{r["leadership_score"]:.2f}'), unsafe_allow_html=True)
+        st.markdown(stat_tile("Leadership", f'{r["leadership_score"]:.2f}',
+                               rag_color(r["leadership_score"], 1.0)), unsafe_allow_html=True)
         st.write("")
-        st.markdown(stat_tile("Loyalty", f'{r["loyalty_score"]:.2f}'), unsafe_allow_html=True)
+        st.markdown(stat_tile("Loyalty", f'{r["loyalty_score"]:.2f}',
+                               rag_color(r["loyalty_score"], 1.0)), unsafe_allow_html=True)
         st.write("")
         st.markdown(cost_strip(r["total_cost_usd"]), unsafe_allow_html=True)
 
@@ -472,8 +544,14 @@ def view_profile():
     action_cols = st.columns(len(actions))
     for col, (label, kwargs) in zip(action_cols, actions):
         if col.button(label, key=f"pact_{r['candidate_id']}_{label}"):
-            record_action(state, r["candidate_id"], r["fraud_risk"], comment=comment, **kwargs)
-            st.rerun()
+            target_category = kwargs.get("category")
+            if target_category and requires_comment(r, target_category) and not comment.strip():
+                st.error(f"A comment is required to move this candidate to "
+                         f"{CATEGORIES[target_category]['label']} — the system hasn't already "
+                         f"flagged a reason for this move.")
+            else:
+                record_action(state, r["candidate_id"], r["fraud_risk"], comment=comment, **kwargs)
+                st.rerun()
 
     st.write("")
     if cat_state["history"]:
