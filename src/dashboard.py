@@ -387,7 +387,7 @@ def view_requirements():
         avg_fit = round(sum(shortlisted_scores) / len(shortlisted_scores)) if shortlisted_scores else 0
 
         with st.container(border=True):
-            cols = st.columns([3, 1, 1, 1, 1.2])
+            cols = st.columns([2.5, 0.9, 0.9, 1.6, 0.9])
             with cols[0]:
                 st.markdown(gradient_heading(jd["title"], size="1.5rem", weight=700), unsafe_allow_html=True)
                 st.markdown(f'<div class="meta-line">{jd["company"]} &middot; {jd["location"]} '
@@ -398,7 +398,7 @@ def view_requirements():
                 st.markdown(stat_tile("Shortlist", str(shortlisted_n)), unsafe_allow_html=True)
             with cols[3]:
                 avg_color = rag_color(avg_fit, 100) if shortlisted_scores else None
-                st.markdown(stat_tile("Avg fit", f"{avg_fit}%", avg_color), unsafe_allow_html=True)
+                st.markdown(stat_tile("Avg fit of shortlist", f"{avg_fit}%", avg_color), unsafe_allow_html=True)
             with cols[4]:
                 st.markdown(stat_tile("Flagged", str(flagged_n)), unsafe_allow_html=True)
             st.write("")
