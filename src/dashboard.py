@@ -8,10 +8,15 @@ Three views, drill-down navigation (not one long scrolling page):
   Requirements (open roles) -> Candidate Ranking (for one role) -> Candidate Profile
 
 Reads output/pipeline_results.json (produced by `python -m src.run_pipeline`).
-Accept/override clicks are logged to output/feedback_log.json - the raw
-material for the confidence-calibration feedback loop described in the
-architecture doc (comparing stated confidence against what a human actually
-decided, over time).
+
+Hiring pipeline tracking (output/pipeline_state.json): every candidate has a
+category (Shortlisted / Flagged for Risk / Not Moving Forward) and a round
+(AI Screening -> Technical Screening -> ...). Category defaults from the
+fraud-detection agent's risk rating but is human-movable from any list view
+or the profile page - moving/advancing appends a timestamped, comment-able
+history entry. This is also what feeds the confidence-calibration feedback
+loop described in the architecture doc (comparing stated confidence against
+what a human actually decided, over time).
 """
 
 import json
@@ -24,7 +29,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
 OUTPUT_DIR = ROOT / "output"
 RESULTS_PATH = OUTPUT_DIR / "pipeline_results.json"
-FEEDBACK_LOG_PATH = OUTPUT_DIR / "feedback_log.json"
+PIPELINE_STATE_PATH = OUTPUT_DIR / "pipeline_state.json"
 
 # ---- Status palette (fixed, reserved meaning - never reused for anything else) ----
 STATUS = {
@@ -32,6 +37,17 @@ STATUS = {
     "medium": {"color": "#fab219", "icon": "⚠", "label": "Medium risk"},
     "high": {"color": "#d03b3b", "icon": "✕", "label": "High risk"},
 }
+
+# ---- Hiring pipeline: rounds and categories ----
+ROUNDS = ["AI Screening", "Technical Screening"]
+
+CATEGORIES = {
+    "shortlisted": {"label": "Shortlisted", "color": "#3987e5"},
+    "flagged_for_risk": {"label": "Flagged for Risk", "color": "#d03b3b"},
+    "not_moving_forward": {"label": "Not Moving Forward", "color": "#898781"},
+}
+CATEGORY_ORDER = ["shortlisted", "flagged_for_risk", "not_moving_forward"]
+
 ACCENT = "#3987e5"       # sequential blue - fit score
 ACCENT_TRACK = "#1c3a5e"  # darker step of the same ramp, recedes on dark surface
 INK = "#ffffff"
@@ -50,6 +66,12 @@ footer {{visibility: hidden;}}
 .status-badge {{
     display: inline-flex; align-items: center; gap: 5px;
     padding: 3px 10px; border-radius: 999px; font-size: 0.82rem; font-weight: 600;
+    white-space: nowrap;
+}}
+.round-badge {{
+    display: inline-flex; align-items: center;
+    padding: 3px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 600;
+    background: {SURFACE_2}; border: 1px solid {BORDER}; color: {INK_SECONDARY};
     white-space: nowrap;
 }}
 .stat-tile {{
@@ -93,28 +115,52 @@ def load_data():
     return jds, candidates, results
 
 
-def log_feedback(candidate_id: str, decision: str, stated_confidence: float):
-    log = []
-    if FEEDBACK_LOG_PATH.exists():
-        log = json.loads(FEEDBACK_LOG_PATH.read_text())
-    log.append({
-        "candidate_id": candidate_id,
-        "decision": decision,
-        "stated_confidence": stated_confidence,
+def load_pipeline_state() -> dict:
+    """Not cached - must reflect writes from this same session immediately."""
+    if not PIPELINE_STATE_PATH.exists():
+        return {}
+    return json.loads(PIPELINE_STATE_PATH.read_text())
+
+
+def save_pipeline_state(state: dict):
+    PIPELINE_STATE_PATH.write_text(json.dumps(state, indent=2))
+
+
+def default_category(fraud_risk: str) -> str:
+    return "flagged_for_risk" if fraud_risk == "high" else "shortlisted"
+
+
+def get_candidate_state(state: dict, candidate_id: str, fraud_risk: str) -> dict:
+    entry = state.get(candidate_id)
+    if entry:
+        return entry
+    return {"category": default_category(fraud_risk), "round_index": 0, "history": []}
+
+
+def record_action(state: dict, candidate_id: str, fraud_risk: str, *,
+                   category: str | None = None, advance: bool = False, comment: str = ""):
+    cur = get_candidate_state(state, candidate_id, fraud_risk)
+    round_index = cur["round_index"]
+    new_category = category if category is not None else cur["category"]
+
+    if advance:
+        round_index = min(round_index + 1, len(ROUNDS) - 1)
+        action_label = f"Advanced to {ROUNDS[round_index]}"
+    elif category is not None and category != cur["category"]:
+        action_label = f"Moved to {CATEGORIES[category]['label']}"
+    else:
+        action_label = "Comment added"
+
+    history = list(cur["history"])
+    history.append({
+        "round_index": round_index,
+        "round_name": ROUNDS[round_index],
+        "action": action_label,
+        "comment": comment,
         "timestamp": datetime.now(timezone.utc).isoformat(),
     })
-    FEEDBACK_LOG_PATH.write_text(json.dumps(log, indent=2))
-
-
-def load_feedback() -> dict:
-    """Not cached - must reflect writes from this same session immediately."""
-    if not FEEDBACK_LOG_PATH.exists():
-        return {}
-    log = json.loads(FEEDBACK_LOG_PATH.read_text())
-    latest = {}
-    for entry in log:  # log is append-only in chronological order; later entries win
-        latest[entry["candidate_id"]] = entry
-    return latest
+    state[candidate_id] = {"category": new_category, "round_index": round_index, "history": history}
+    save_pipeline_state(state)
 
 
 # ---------------------------------------------------------------------------
@@ -125,6 +171,16 @@ def status_badge(risk: str) -> str:
     s = STATUS.get(risk, {"color": INK_MUTED, "icon": "?", "label": risk})
     return (f'<span class="status-badge" style="background:{s["color"]}22;'
             f'color:{s["color"]};border:1px solid {s["color"]}66;">{s["icon"]} {s["label"]}</span>')
+
+
+def category_badge(category: str) -> str:
+    c = CATEGORIES.get(category, {"label": category, "color": INK_MUTED})
+    return (f'<span class="status-badge" style="background:{c["color"]}22;'
+            f'color:{c["color"]};border:1px solid {c["color"]}66;">{c["label"]}</span>')
+
+
+def round_badge(round_index: int) -> str:
+    return f'<span class="round-badge">Round {round_index + 1}: {ROUNDS[round_index]}</span>'
 
 
 def fit_meter(score: int) -> str:
@@ -154,6 +210,21 @@ def cost_strip(total: float, avg: float | None = None) -> str:
             f'<div class="cost-strip-value">${total:.4f}</div></div>{avg_html}</div>')
 
 
+def move_control(state: dict, r: dict, key_prefix: str):
+    """Compact category-move dropdown usable from any list row. Applies
+    immediately on change - this is what makes candidates movable between
+    Shortlisted / Flagged for Risk / Not Moving Forward from any list."""
+    cat_state = r["_cat_state"]
+    labels = [CATEGORIES[c]["label"] for c in CATEGORY_ORDER]
+    cur_idx = CATEGORY_ORDER.index(cat_state["category"])
+    choice = st.selectbox("Move to", labels, index=cur_idx,
+                           key=f"{key_prefix}_{r['candidate_id']}", label_visibility="collapsed")
+    new_cat = CATEGORY_ORDER[labels.index(choice)]
+    if new_cat != cat_state["category"]:
+        record_action(state, r["candidate_id"], r["fraud_risk"], category=new_cat)
+        st.rerun()
+
+
 # ---------------------------------------------------------------------------
 # Navigation (session-state driven, not Streamlit's file-based multipage)
 # ---------------------------------------------------------------------------
@@ -173,18 +244,6 @@ def go(view: str, **kwargs):
 
 jds, candidates, results = load_data()
 jds_by_id = {j["job_id"]: j for j in jds}
-candidates_by_id = {c["candidate_id"]: c for c in candidates}
-feedback = load_feedback()
-
-
-def reviewed_tag(candidate_id: str) -> str | None:
-    fb = feedback.get(candidate_id)
-    if not fb:
-        return None
-    color = "#0ca30c" if fb["decision"] == "accepted" else "#fab219"
-    icon = "✅" if fb["decision"] == "accepted" else "↩️"
-    label = "Accepted" if fb["decision"] == "accepted" else "Overridden"
-    return f'<span class="status-badge" style="background:{color}22;color:{color};border:1px solid {color}66;">{icon} {label}</span>'
 
 
 # ---------------------------------------------------------------------------
@@ -196,11 +255,15 @@ def view_requirements():
     st.caption("Open requirements — select one to see its ranked candidates")
     st.write("")
 
+    state = load_pipeline_state()
+
     for jd in jds:
         job_results = [r for r in results if r["job_id"] == jd["job_id"]]
-        flagged = [r for r in job_results if r["fraud_risk"] == "high"]
-        rankable = [r for r in job_results if r["fraud_risk"] != "high"]
-        avg_fit = round(sum(r["fit_score"] for r in rankable) / len(rankable)) if rankable else 0
+        cats = [get_candidate_state(state, r["candidate_id"], r["fraud_risk"])["category"] for r in job_results]
+        shortlisted_n = cats.count("shortlisted")
+        flagged_n = cats.count("flagged_for_risk")
+        shortlisted_scores = [r["fit_score"] for r, c in zip(job_results, cats) if c == "shortlisted"]
+        avg_fit = round(sum(shortlisted_scores) / len(shortlisted_scores)) if shortlisted_scores else 0
 
         with st.container(border=True):
             cols = st.columns([3, 1, 1, 1, 1.2])
@@ -211,11 +274,11 @@ def view_requirements():
             with cols[1]:
                 st.markdown(stat_tile("Candidates", str(len(job_results))), unsafe_allow_html=True)
             with cols[2]:
-                st.markdown(stat_tile("Shortlist", str(len(rankable))), unsafe_allow_html=True)
+                st.markdown(stat_tile("Shortlist", str(shortlisted_n)), unsafe_allow_html=True)
             with cols[3]:
-                st.markdown(stat_tile("Avg fit", str(avg_fit)), unsafe_allow_html=True)
+                st.markdown(stat_tile("Avg fit", f"{avg_fit}%"), unsafe_allow_html=True)
             with cols[4]:
-                st.markdown(stat_tile("Flagged", str(len(flagged))), unsafe_allow_html=True)
+                st.markdown(stat_tile("Flagged", str(flagged_n)), unsafe_allow_html=True)
             st.write("")
             if st.button("View Candidates →", key=f"open_{jd['job_id']}", type="primary"):
                 go("candidates", job_id=jd["job_id"])
@@ -225,13 +288,55 @@ def view_requirements():
 # View 2 - Candidate ranking (for one requirement)
 # ---------------------------------------------------------------------------
 
+def candidate_row(r: dict, state: dict, key_prefix: str, rank: int | None = None):
+    cat_state = r["_cat_state"]
+    with st.container(border=True):
+        cols = st.columns([2.1, 1.8, 0.9, 0.9, 1.9])
+        with cols[0]:
+            name_line = f"{rank}. {r['name']}" if rank else r["name"]
+            st.markdown(f"**{name_line}**")
+            st.caption(r["source_channel"])
+        with cols[1]:
+            st.markdown(fit_meter(r["fit_score"]), unsafe_allow_html=True)
+            st.caption("fit score")
+        with cols[2]:
+            st.markdown(f"**{r['leadership_score']:.2f}**")
+            st.caption("leadership")
+        with cols[3]:
+            st.markdown(f"**{r['loyalty_score']:.2f}**")
+            st.caption("loyalty")
+        with cols[4]:
+            if r["fraud_risk"] == "medium" and cat_state["category"] == "shortlisted":
+                st.markdown(status_badge("medium"), unsafe_allow_html=True)
+            st.markdown(round_badge(cat_state["round_index"]), unsafe_allow_html=True)
+
+        cols2 = st.columns([2, 2.3, 1.5])
+        with cols2[0]:
+            move_control(state, r, key_prefix)
+        with cols2[1]:
+            if cat_state["category"] == "shortlisted" and cat_state["round_index"] < len(ROUNDS) - 1:
+                next_round = ROUNDS[cat_state["round_index"] + 1]
+                if st.button(f"Advance to {next_round} →", key=f"{key_prefix}_adv_{r['candidate_id']}"):
+                    record_action(state, r["candidate_id"], r["fraud_risk"], advance=True)
+                    st.rerun()
+        with cols2[2]:
+            if st.button("View Profile →", key=f"{key_prefix}_prof_{r['candidate_id']}"):
+                go("profile", candidate_id=r["candidate_id"])
+
+
 def view_candidates():
     jd = jds_by_id[st.session_state.job_id]
     job_results = [r for r in results if r["job_id"] == jd["job_id"]]
-    flagged = [r for r in job_results if r["fraud_risk"] == "high"]
-    rankable = sorted([r for r in job_results if r["fraud_risk"] != "high"],
-                       key=lambda r: r["fit_score"], reverse=True)
     total_cost = sum(r["total_cost_usd"] for r in job_results)
+
+    state = load_pipeline_state()
+    for r in job_results:
+        r["_cat_state"] = get_candidate_state(state, r["candidate_id"], r["fraud_risk"])
+
+    shortlisted = sorted([r for r in job_results if r["_cat_state"]["category"] == "shortlisted"],
+                          key=lambda r: r["fit_score"], reverse=True)
+    flagged = [r for r in job_results if r["_cat_state"]["category"] == "flagged_for_risk"]
+    not_moving = [r for r in job_results if r["_cat_state"]["category"] == "not_moving_forward"]
 
     if st.button("← All Requirements"):
         go("requirements")
@@ -246,53 +351,43 @@ def view_candidates():
         st.markdown(cost_strip(total_cost, avg_cost), unsafe_allow_html=True)
 
     c1, c2 = st.columns(2)
-    c1.markdown(stat_tile("Flagged for review", str(len(flagged))), unsafe_allow_html=True)
-    c2.markdown(stat_tile("Ranked shortlist", str(len(rankable))), unsafe_allow_html=True)
+    c1.markdown(stat_tile("Ranked shortlist", str(len(shortlisted))), unsafe_allow_html=True)
+    c2.markdown(stat_tile("Flagged for review", str(len(flagged))), unsafe_allow_html=True)
     st.write("")
 
     st.markdown('<div class="section-label">Ranked shortlist &mdash; by fit score</div>', unsafe_allow_html=True)
-    for i, r in enumerate(rankable, 1):
-        with st.container(border=True):
-            cols = st.columns([2.4, 2.4, 1.1, 1.1, 1.3])
-            with cols[0]:
-                st.markdown(f"**{i}. {r['name']}**")
-                st.caption(r["source_channel"])
-            with cols[1]:
-                st.markdown(fit_meter(r["fit_score"]), unsafe_allow_html=True)
-                st.caption("fit score")
-            with cols[2]:
-                st.markdown(f"**{r['leadership_score']:.2f}**")
-                st.caption("leadership")
-            with cols[3]:
-                st.markdown(f"**{r['loyalty_score']:.2f}**")
-                st.caption("loyalty")
-            with cols[4]:
-                if r["fraud_risk"] == "medium":
-                    st.markdown(status_badge("medium"), unsafe_allow_html=True)
-                tag = reviewed_tag(r["candidate_id"])
-                if tag:
-                    st.markdown(tag, unsafe_allow_html=True)
-                if st.button("View Profile →", key=f"prof_{r['candidate_id']}"):
-                    go("profile", candidate_id=r["candidate_id"])
+    if shortlisted:
+        for i, r in enumerate(shortlisted, 1):
+            candidate_row(r, state, "sl", rank=i)
+    else:
+        st.caption("No candidates currently shortlisted.")
 
+    st.write("")
+    st.markdown(f'<div class="section-label">\U0001F6A8 Flagged for Risk ({len(flagged)})</div>',
+                unsafe_allow_html=True)
     if flagged:
-        st.write("")
-        st.markdown(f'<div class="section-label">\U0001F6A8 Flagged for manual review ({len(flagged)}) '
-                    f'&mdash; excluded from ranking above</div>', unsafe_allow_html=True)
         for r in flagged:
-            with st.container(border=True):
-                cols = st.columns([2.6, 1.7, 1.7, 1.5])
+            candidate_row(r, state, "fl")
+    else:
+        st.caption("No candidates currently flagged.")
+
+    if not_moving:
+        st.write("")
+        with st.expander(f"Not Moving Forward ({len(not_moving)}) — kept out of the active lists above"):
+            for r in not_moving:
+                cat_state = r["_cat_state"]
+                cols = st.columns([2.3, 2.5, 2, 1.3])
                 with cols[0]:
                     st.markdown(f"**{r['name']}**")
                     st.caption(r["source_channel"])
                 with cols[1]:
-                    st.markdown(status_badge("high"), unsafe_allow_html=True)
+                    if cat_state["history"]:
+                        last = cat_state["history"][-1]
+                        st.caption(f"{last['action']} · {last['round_name']}")
                 with cols[2]:
-                    tag = reviewed_tag(r["candidate_id"])
-                    if tag:
-                        st.markdown(tag, unsafe_allow_html=True)
+                    move_control(state, r, "nmf")
                 with cols[3]:
-                    if st.button("View Profile →", key=f"prof_{r['candidate_id']}"):
+                    if st.button("View Profile →", key=f"nmf_prof_{r['candidate_id']}"):
                         go("profile", candidate_id=r["candidate_id"])
 
 
@@ -303,13 +398,18 @@ def view_candidates():
 def view_profile():
     r = next(x for x in results if x["candidate_id"] == st.session_state.candidate_id)
     jd = jds_by_id[r["job_id"]]
+    state = load_pipeline_state()
+    cat_state = get_candidate_state(state, r["candidate_id"], r["fraud_risk"])
 
     if st.button("← Back to Candidates"):
         go("candidates", job_id=r["job_id"])
 
     st.title(r["name"])
     st.caption(f'Applying for {jd["title"]} at {jd["company"]} &middot; via {r["source_channel"]}')
-    st.markdown(status_badge(r["fraud_risk"]), unsafe_allow_html=True)
+    badge_cols = st.columns([1.3, 1.4, 1.6, 4])
+    badge_cols[0].markdown(status_badge(r["fraud_risk"]), unsafe_allow_html=True)
+    badge_cols[1].markdown(category_badge(cat_state["category"]), unsafe_allow_html=True)
+    badge_cols[2].markdown(round_badge(cat_state["round_index"]), unsafe_allow_html=True)
     st.write("")
 
     col_a, col_b = st.columns([2, 1])
@@ -353,28 +453,39 @@ def view_profile():
         st.markdown(stat_tile("Loyalty", f'{r["loyalty_score"]:.2f}'), unsafe_allow_html=True)
         st.write("")
         st.markdown(cost_strip(r["total_cost_usd"]), unsafe_allow_html=True)
-        st.write("")
-        st.write("")
-        st.markdown("**Recruiter decision**")
 
-        existing = feedback.get(r["candidate_id"])
-        if existing:
-            ts = datetime.fromisoformat(existing["timestamp"]).strftime("%b %d, %I:%M %p UTC")
-            if existing["decision"] == "accepted":
-                st.success(f"✅ Accepted — logged {ts}")
-            else:
-                st.warning(f"↩️ Overridden — logged {ts}")
-            st.caption("Click either button below to change this decision.")
-        else:
-            st.caption("Not yet reviewed.")
+    st.write("")
+    st.write("")
+    st.markdown('<div class="section-label">Hiring pipeline</div>', unsafe_allow_html=True)
 
-        bc1, bc2 = st.columns(2)
-        if bc1.button("✅ Accept", key=f"accept_{r['candidate_id']}"):
-            log_feedback(r["candidate_id"], "accepted", r["raw"]["fit"]["confidence_score"])
+    comment = st.text_input("Comment (optional — attached to whichever action you take below)",
+                             key=f"comment_{r['candidate_id']}")
+
+    actions = []
+    if cat_state["category"] == "shortlisted" and cat_state["round_index"] < len(ROUNDS) - 1:
+        next_round = ROUNDS[cat_state["round_index"] + 1]
+        actions.append((f"Advance to {next_round} →", {"advance": True}))
+    for cat in CATEGORY_ORDER:
+        if cat != cat_state["category"]:
+            actions.append((f"Move to {CATEGORIES[cat]['label']}", {"category": cat}))
+
+    action_cols = st.columns(len(actions))
+    for col, (label, kwargs) in zip(action_cols, actions):
+        if col.button(label, key=f"pact_{r['candidate_id']}_{label}"):
+            record_action(state, r["candidate_id"], r["fraud_risk"], comment=comment, **kwargs)
             st.rerun()
-        if bc2.button("↩️ Override", key=f"override_{r['candidate_id']}"):
-            log_feedback(r["candidate_id"], "overridden", r["raw"]["fit"]["confidence_score"])
-            st.rerun()
+
+    st.write("")
+    if cat_state["history"]:
+        st.markdown("**History**")
+        for h in reversed(cat_state["history"]):
+            ts = datetime.fromisoformat(h["timestamp"]).strftime("%b %d, %I:%M %p UTC")
+            line = f"- **{h['action']}** — {h['round_name']} &middot; {ts}"
+            st.markdown(line, unsafe_allow_html=True)
+            if h["comment"]:
+                st.caption(h["comment"])
+    else:
+        st.caption(f"No pipeline actions yet — currently at Round 1: {ROUNDS[0]}.")
 
 
 # ---------------------------------------------------------------------------

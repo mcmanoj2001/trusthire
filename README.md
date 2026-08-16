@@ -12,7 +12,9 @@ Given `data/jd.json` (one job description) and `data/candidates.json` (a batch o
 2. **JD-Fit & Suitability Scoring** — scores each candidate against the specific job's must-haves and nice-to-haves, citing which requirements are met/missing and why.
 3. **Behavioral Trait Intelligence** — infers leadership and loyalty as evidence-based proxies, with the same bias-awareness guardrail: no penalty for job changes with a stated legitimate reason.
 
-An orchestrator runs all three per candidate, gates out high-fraud-risk candidates from the main ranking, and produces a ranked shortlist. A Streamlit dashboard surfaces the results with full evidence, plus Accept/Override buttons that log recruiter decisions — the raw input for a confidence-calibration feedback loop (see architecture doc, Section 4.16).
+An orchestrator runs all three per candidate, and a Streamlit dashboard surfaces the results with full evidence across three drill-down views: open requirements → ranked candidates → candidate profile.
+
+The dashboard also tracks a lightweight hiring pipeline per candidate — a category (Shortlisted / Flagged for Risk / Not Moving Forward, defaulting from the fraud-detection agent's risk rating but movable by a human from any list view or the profile page) and a round (AI Screening → Technical Screening, extensible). Every move or advance is timestamped, comment-able, and kept as history — this is also the raw input for a confidence-calibration feedback loop (see architecture doc, Section 4.16): comparing what a human actually decided against the agent's stated confidence, over time. Rejected candidates move to a collapsed "Not Moving Forward" list so the active view stays short.
 
 ## Setup
 
